@@ -1,0 +1,28 @@
+{
+    "id": "D7E6F747",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1623251904796.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "id": "087c13300a9c47efa0263d180601467c",
+        "name": "panel_list",
+        "title": "panel_list",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 7311138193232785247,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1623251904796,
+    "read_only": false,
+    "read_only_alternatives": []
+}
