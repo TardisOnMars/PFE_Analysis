@@ -1,6 +1,7 @@
 library(readxl)
 library(dplyr)
 library(stringi)
+library(ggplot)
 
 # Create dataframe from excel sheets
 X5_Traits <- read_excel("Les Cinq Facteurs des Traits De Joueurs (réponses).xlsx")
@@ -100,3 +101,30 @@ for(i in 0:4){
                                       G=trait_correlations_p[3], U=trait_correlations_p[4], C=trait_correlations_p[5], O=trait_correlations_p[6], L=trait_correlations_p[7],
                                       TT=trait_correlations_p[8], X=trait_correlations_p[9])
 }
+
+summarise_traits <- summarise(traits_join_DFS_Objective, across(c("Score Défi", "Score Esthétique", "Score Narratif", "Score Social", "Score Objectifs"), list(mean = mean, sd = sd, min = min, max = max)))
+
+summarise_objective <- summarise(traits_join_DFS_Objective, across(c("Challenge-Skill Balance (S)", "Action Awareness (A)", "Clear Goals (G)",
+                                                           "Unambiguous Feedback (U)", "Concentration (C)", "Sense of Control (O)",
+                                                           "Loss of Self-Consciousness (L)", "Time Transformation (T)", "Autotelic experience (X)"),
+                                                         list(mean = mean, sd = sd, min = min, max = max)))
+summarise_aesthetic <- summarise(traits_join_DFS_Aesthetic, across(c("Challenge-Skill Balance (S)", "Action Awareness (A)", "Clear Goals (G)",
+                                                           "Unambiguous Feedback (U)", "Concentration (C)", "Sense of Control (O)",
+                                                           "Loss of Self-Consciousness (L)", "Time Transformation (T)", "Autotelic experience (X)"),
+                                                         list(mean = mean, sd = sd, min = min, max = max)))
+summarise_narrative <- summarise(traits_join_DFS_Narrative, across(c("Challenge-Skill Balance (S)", "Action Awareness (A)", "Clear Goals (G)",
+                                                           "Unambiguous Feedback (U)", "Concentration (C)", "Sense of Control (O)",
+                                                           "Loss of Self-Consciousness (L)", "Time Transformation (T)", "Autotelic experience (X)"),
+                                                         list(mean = mean, sd = sd, min = min, max = max)))
+
+
+
+
+
+
+
+
+
+
+
+
