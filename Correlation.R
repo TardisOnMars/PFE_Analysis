@@ -1,31 +1,4 @@
-library(readxl)
-library(dplyr)
-library(stringi)
-library(ggplot)
-
-# Create dataframe from excel sheets
-X5_Traits <- read_excel("Les Cinq Facteurs des Traits De Joueurs (réponses).xlsx")
-DFS_TPI <- read_excel("Dispositional Flow Scale + TPI (réponses).xlsx")
-
-# Erase test data (from before 21st of May)
-X5_Traits <- filter(X5_Traits, X5_Traits$Horodateur >= "2021-05-21")
-# Erase double from data
-X5_Traits <- distinct(X5_Traits, X5_Traits$`Adresse e-mail`, .keep_all = TRUE)
-# Lower and remove accents from all names
-X5_Traits$`Quel est votre prénom ?` <- stri_trans_general(tolower(X5_Traits$`Quel est votre prénom ?`), "Latin-ASCII")
-X5_Traits$`Quel est votre nom de famille ?` <- stri_trans_general(tolower(X5_Traits$`Quel est votre nom de famille ?`), "Latin-ASCII")
-
-# Erase test data (from before 25th of May)
-DFS_TPI <- filter(DFS_TPI, DFS_TPI$Horodateur >= "2021-05-25")
-# Lower and remove accents from all names
-DFS_TPI$`Quel est votre prénom ?` <- stri_trans_general(tolower(DFS_TPI$`Quel est votre prénom ?`), "Latin-ASCII")
-DFS_TPI$`Quel est votre nom de famille ?` <- stri_trans_general(tolower(DFS_TPI$`Quel est votre nom de famille ?`), "Latin-ASCII")
-
-traits_join_DFS <- inner_join(X5_Traits, DFS_TPI, by=c("Quel est votre nom de famille ?", "Quel est votre prénom ?"))
-
-traits_join_DFS_Objective <- filter(traits_join_DFS, traits_join_DFS$`Qu'avez vous vu lors de l'expérience ?` == "Des zombies")
-traits_join_DFS_Narrative <- filter(traits_join_DFS, traits_join_DFS$`Qu'avez vous vu lors de l'expérience ?` == "Les recherches d'Isidore")
-traits_join_DFS_Aesthetic <- filter(traits_join_DFS, traits_join_DFS$`Qu'avez vous vu lors de l'expérience ?` == "Des portails")
+source("LoadData.R",encoding="utf-8")
 
 # Correlations computation for objective scenario
 
