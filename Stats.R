@@ -1,0 +1,16 @@
+source("LoadData.R",encoding="utf-8")
+
+#### Basic Stats
+Objective_stats = get_summary_stats(traits_join_DFS_Objective, type = "common")
+par(mfrow = c(1,9))
+boxplot(traits_join_DFS_Objective$challenge_skill_balance)
+boxplot(traits_join_DFS_Objective$action_awareness)
+boxplot(traits_join_DFS_Objective$clear_goals)
+boxplot(traits_join_DFS_Objective$unambiguous_feedback)
+boxplot(traits_join_DFS_Objective$concentration)
+boxplot(traits_join_DFS_Objective$sense_of_control)
+boxplot(traits_join_DFS_Objective$loss_self_consciousness)
+boxplot(traits_join_DFS_Objective$time_transformation)
+boxplot(traits_join_DFS_Objective$autotelic_experience)
+Aesthetic_stats = get_summary_stats(traits_join_DFS_Aesthetic, type = "common")
+Narrative_stats = get_summary_stats(traits_join_DFS_Narrative, type = "common")
