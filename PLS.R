@@ -177,9 +177,9 @@ plot_plspm_traits_dfs = function(path_coefs, p_values, significative_level = 0.0
            insig = "blank",  mar=c(0,0,2,0))
 }
 
-aesthetic_dfs = plspm_traits_dfs_3(traits_join_DFS_Aesthetic)
-narrative_dfs = plspm_traits_dfs_3(traits_join_DFS_Narrative)
-objective_dfs = plspm_traits_dfs_3(traits_join_DFS_Objective)
+aesthetic_dfs = plspm_traits_dfs(traits_join_DFS_Aesthetic)
+narrative_dfs = plspm_traits_dfs(traits_join_DFS_Narrative)
+objective_dfs = plspm_traits_dfs(traits_join_DFS_Objective)
 
 par(mfrow = c(1,3))
 plot_plspm_traits_dfs(aesthetic_dfs$path_coefs, aesthetic_dfs$p_values, title = "Aesthetic scenario")
