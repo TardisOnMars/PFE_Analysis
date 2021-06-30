@@ -42,8 +42,9 @@ DFS_TPI <- mutate(rowwise(DFS_TPI), engagement=sum(c_across(38:43))/6)
 
 # Erase test data (from before 21st of May)
 X5_Traits <- filter(X5_Traits, horodateur >= "2021-05-21")
+X5_Traits <- filter(X5_Traits, !identifiant.participant %in% c(8, 9, 12, 13, 21, 23, 27, 31, 33, 36, 54, 27))
 
-X5_Traits <- filter(X5_Traits, a.quelle.frequence.jouez.vous.aux.jeux.videos.. != "Jamais")
+# X5_Traits <- filter(X5_Traits, a.quelle.frequence.jouez.vous.aux.jeux.videos.. != "Jamais")
 
 # Erase double from data
 X5_Traits <- distinct(X5_Traits, adresse.e.mail, .keep_all = TRUE)
