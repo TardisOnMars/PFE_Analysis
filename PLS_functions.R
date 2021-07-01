@@ -209,11 +209,52 @@ plspm_traits_dfs_5 = function(traits_dfs_df){
   return(results)
 }
 
+plspm_traits_dfs_6 = function(traits_dfs_df){
+  traits_blocks = 36:40
+  dfs_blocks = list(c(87, 88, 89, 94))
+  presence_blocks = 95
+  traits_dfs_blocks = append(traits_blocks, dfs_blocks)
+  traits_dfs_blocks = as.list(append(traits_dfs_blocks, presence_blocks))
+  
+  traits_modes = rep("A", 5)
+  dfs_modes = "A"
+  presence_modes = "A"
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  traits_dfs_modes = append(traits_dfs_modes, presence_modes)
+  
+  traits_dfs_path = read.csv("path_inner_model_2.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:5]
+  output_vars = colnames(traits_dfs_path)[6:7]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
 plot_plspm_traits_dfs = function(path_coefs, p_values, significative_level = 0.05, title = "")
 {
   corrplot(path_coefs, title=title, 
            sig.level = significative_level, p.mat = p_values, 
-           is.corr = FALSE, col=brewer.pal(n=8, name="PuOr"),
+           is.corr = FALSE, cl.lim = c(-1, 1), col=brewer.pal(n=8, name="PuOr"),
            insig = "blank",  mar=c(0,0,2,0))
 }
 
@@ -238,6 +279,10 @@ pls_analysis = function(aesthetic_df, narrative_df, objectives_df, type=1){
     aesthetic_pls = plspm_traits_dfs_5(aesthetic_df)
     narrative_pls = plspm_traits_dfs_5(narrative_df)
     objectives_pls = plspm_traits_dfs_5(objectives_df)
+  }else if(type==6){
+    aesthetic_pls = plspm_traits_dfs_6(aesthetic_df)
+    narrative_pls = plspm_traits_dfs_6(narrative_df)
+    objectives_pls = plspm_traits_dfs_6(objectives_df)
   }
   
   par(mfrow = c(1,3))
