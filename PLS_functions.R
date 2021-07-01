@@ -1,9 +1,8 @@
 library(plspm)
 library(corrplot)
 library(RColorBrewer)
-source("LoadData.R",encoding="utf-8")
 
-plspm_traits_dfs = function(traits_join_dfs_df){
+plspm_traits_dfs = function(traits_dfs_df){
   traits_blocks = 36:40
   dfs_blocks = 86:94
   presence_blocks = 95
@@ -21,7 +20,7 @@ plspm_traits_dfs = function(traits_join_dfs_df){
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
   
-  traits_dfs_pls = plspm(traits_join_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
   
   input_vars = colnames(traits_dfs_path)[1:5]
   output_vars = colnames(traits_dfs_path)[6:15]
@@ -44,7 +43,7 @@ plspm_traits_dfs = function(traits_join_dfs_df){
   return(results)
 }
 
-plspm_traits_dfs_2 = function(traits_join_dfs_df){
+plspm_traits_dfs_2 = function(traits_dfs_df){
   traits_blocks = 36:40
   dfs_blocks = list(86:94)
   presence_blocks = 95
@@ -62,7 +61,7 @@ plspm_traits_dfs_2 = function(traits_join_dfs_df){
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
   
-  traits_dfs_pls = plspm(traits_join_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
   
   input_vars = colnames(traits_dfs_path)[1:5]
   output_vars = colnames(traits_dfs_path)[6:7]
@@ -86,7 +85,7 @@ plspm_traits_dfs_2 = function(traits_join_dfs_df){
 }
 
 
-plspm_traits_dfs_3 = function(traits_join_dfs_df){
+plspm_traits_dfs_3 = function(traits_dfs_df){
   traits_blocks = 36:40
   dfs_blocks = c(87, 89, 90, 92, 93, 94)
   presence_blocks = 95
@@ -104,7 +103,7 @@ plspm_traits_dfs_3 = function(traits_join_dfs_df){
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
   
-  traits_dfs_pls = plspm(traits_join_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
   
   input_vars = colnames(traits_dfs_path)[1:5]
   output_vars = colnames(traits_dfs_path)[6:12]
@@ -128,7 +127,7 @@ plspm_traits_dfs_3 = function(traits_join_dfs_df){
 }
 
 
-plspm_traits_dfs_4 = function(traits_join_dfs_df){
+plspm_traits_dfs_4 = function(traits_dfs_df){
   traits_blocks = 36:40
   dfs_blocks = list(c(87, 89, 90, 92, 93, 94))
   presence_blocks = 95
@@ -146,7 +145,7 @@ plspm_traits_dfs_4 = function(traits_join_dfs_df){
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
   
-  traits_dfs_pls = plspm(traits_join_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
   
   input_vars = colnames(traits_dfs_path)[1:5]
   output_vars = colnames(traits_dfs_path)[6:7]
@@ -169,7 +168,7 @@ plspm_traits_dfs_4 = function(traits_join_dfs_df){
   return(results)
 }
 
-plspm_traits_dfs_5 = function(traits_join_dfs_df){
+plspm_traits_dfs_5 = function(traits_dfs_df){
   traits_blocks = 36:40
   dfs_blocks = c(87, 88, 89, 94)
   presence_blocks = 95
@@ -187,7 +186,7 @@ plspm_traits_dfs_5 = function(traits_join_dfs_df){
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
   
-  traits_dfs_pls = plspm(traits_join_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
   
   input_vars = colnames(traits_dfs_path)[1:5]
   output_vars = colnames(traits_dfs_path)[6:10]
@@ -214,42 +213,42 @@ plot_plspm_traits_dfs = function(path_coefs, p_values, significative_level = 0.0
 {
   corrplot(path_coefs, title=title, 
            sig.level = significative_level, p.mat = p_values, 
-           is.corr = FALSE, cl.lim=c(-1.0, 1.0), col=brewer.pal(n=8, name="PuOr"),
+           is.corr = FALSE, col=brewer.pal(n=8, name="PuOr"),
            insig = "blank",  mar=c(0,0,2,0))
 }
 
 pls_analysis = function(aesthetic_df, narrative_df, objectives_df, type=1){
   if(type==1){
-    aesthetic_dfs = plspm_traits_dfs(traits_join_DFS_Aesthetic)
-    narrative_dfs = plspm_traits_dfs(traits_join_DFS_Narrative)
-    objective_dfs = plspm_traits_dfs(traits_join_DFS_Objective)
+    aesthetic_pls = plspm_traits_dfs(aesthetic_df)
+    narrative_pls = plspm_traits_dfs(narrative_df)
+    objectives_pls = plspm_traits_dfs(objectives_df)
   }else if(type==2){
-    aesthetic_dfs = plspm_traits_dfs_2(traits_join_DFS_Aesthetic)
-    narrative_dfs = plspm_traits_dfs_2(traits_join_DFS_Narrative)
-    objective_dfs = plspm_traits_dfs_2(traits_join_DFS_Objective)
+    aesthetic_pls = plspm_traits_dfs_2(aesthetic_df)
+    narrative_pls = plspm_traits_dfs_2(narrative_df)
+    objectives_pls = plspm_traits_dfs_2(objectives_df)
   }else if(type==3){
-    aesthetic_dfs = plspm_traits_dfs_3(traits_join_DFS_Aesthetic)
-    narrative_dfs = plspm_traits_dfs_3(traits_join_DFS_Narrative)
-    objective_dfs = plspm_traits_dfs_3(traits_join_DFS_Objective)
+    aesthetic_pls = plspm_traits_dfs_3(aesthetic_df)
+    narrative_pls = plspm_traits_dfs_3(narrative_df)
+    objectives_pls = plspm_traits_dfs_3(objectives_df)
   }else if(type==4){
-    aesthetic_dfs = plspm_traits_dfs_4(traits_join_DFS_Aesthetic)
-    narrative_dfs = plspm_traits_dfs_4(traits_join_DFS_Narrative)
-    objective_dfs = plspm_traits_dfs_4(traits_join_DFS_Objective)
+    aesthetic_pls = plspm_traits_dfs_4(aesthetic_df)
+    narrative_pls = plspm_traits_dfs_4(narrative_df)
+    objectives_pls = plspm_traits_dfs_4(objectives_df)
   }else if(type==5){
-    aesthetic_dfs = plspm_traits_dfs_5(traits_join_DFS_Aesthetic)
-    narrative_dfs = plspm_traits_dfs_5(traits_join_DFS_Narrative)
-    objective_dfs = plspm_traits_dfs_5(traits_join_DFS_Objective)
+    aesthetic_pls = plspm_traits_dfs_5(aesthetic_df)
+    narrative_pls = plspm_traits_dfs_5(narrative_df)
+    objectives_pls = plspm_traits_dfs_5(objectives_df)
   }
   
   par(mfrow = c(1,3))
-  plot_plspm_traits_dfs(aesthetic_dfs$path_coefs, aesthetic_dfs$p_values, title = "Aesthetic scenario")
-  plot_plspm_traits_dfs(narrative_dfs$path_coefs, narrative_dfs$p_values, title = "Narrative scenario")
-  plot_plspm_traits_dfs(objective_dfs$path_coefs, objective_dfs$p_values, title = "Objectives scenario")
+  plot_plspm_traits_dfs(aesthetic_pls$path_coefs, aesthetic_pls$p_values, title = "Aesthetic scenario")
+  plot_plspm_traits_dfs(narrative_pls$path_coefs, narrative_pls$p_values, title = "Narrative scenario")
+  plot_plspm_traits_dfs(objectives_pls$path_coefs, objectives_pls$p_values, title = "Objectives scenario")
   mtext("Significative level = 0.05", line=-6, outer = TRUE)
   
   par(mfrow=c(1,3))
-  plot_plspm_traits_dfs(aesthetic_dfs$path_coefs, aesthetic_dfs$p_values, significative_level = 0.1 ,title = "Aesthetic scenario")
-  plot_plspm_traits_dfs(narrative_dfs$path_coefs, narrative_dfs$p_values, significative_level = 0.1, title = "Narrative scenario")
-  plot_plspm_traits_dfs(objective_dfs$path_coefs, objective_dfs$p_values, significative_level = 0.1, title = "Objectives scenario")
+  plot_plspm_traits_dfs(aesthetic_pls$path_coefs, aesthetic_pls$p_values, significative_level = 0.1 ,title = "Aesthetic scenario")
+  plot_plspm_traits_dfs(narrative_pls$path_coefs, narrative_pls$p_values, significative_level = 0.1, title = "Narrative scenario")
+  plot_plspm_traits_dfs(objectives_pls$path_coefs, objectives_pls$p_values, significative_level = 0.1, title = "Objectives scenario")
   mtext("Significative level = 0.10", line = -6, outer = TRUE)
 }
