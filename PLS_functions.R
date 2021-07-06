@@ -250,15 +250,15 @@ plspm_traits_dfs_6 = function(traits_dfs_df){
   return(results)
 }
 
-plot_plspm_traits_dfs = function(path_coefs, p_values, significative_level = 0.05, title = "")
+plot_plspm_traits_dfs = function(path_coefs, p_values, significative_level = 0.05, title = "", color_lim)
 {
-  corrplot(path_coefs, title=title, 
+  corrplot(path_coefs, title=title, method="number",
            sig.level = significative_level, p.mat = p_values, 
-           is.corr = FALSE, cl.lim = c(-1, 1), col=brewer.pal(n=8, name="PuOr"),
+           is.corr = FALSE, cl.lim = color_lim, col=brewer.pal(n=8, name="PuOr"),
            insig = "blank",  mar=c(0,0,2,0))
 }
 
-pls_analysis = function(aesthetic_df, narrative_df, objectives_df, type=1){
+pls_analysis = function(aesthetic_df, narrative_df, objectives_df, type=1, color_lim = c(-1, 1)){
   if(type==1){
     aesthetic_pls = plspm_traits_dfs(aesthetic_df)
     narrative_pls = plspm_traits_dfs(narrative_df)
@@ -286,14 +286,14 @@ pls_analysis = function(aesthetic_df, narrative_df, objectives_df, type=1){
   }
   
   par(mfrow = c(1,3))
-  plot_plspm_traits_dfs(aesthetic_pls$path_coefs, aesthetic_pls$p_values, title = "Aesthetic scenario")
-  plot_plspm_traits_dfs(narrative_pls$path_coefs, narrative_pls$p_values, title = "Narrative scenario")
-  plot_plspm_traits_dfs(objectives_pls$path_coefs, objectives_pls$p_values, title = "Objectives scenario")
+  plot_plspm_traits_dfs(aesthetic_pls$path_coefs, aesthetic_pls$p_values, title = "Aesthetic scenario", color_lim = color_lim)
+  plot_plspm_traits_dfs(narrative_pls$path_coefs, narrative_pls$p_values, title = "Narrative scenario", color_lim = color_lim)
+  plot_plspm_traits_dfs(objectives_pls$path_coefs, objectives_pls$p_values, title = "Objectives scenario", color_lim = color_lim)
   mtext("Significative level = 0.05", line=-6, outer = TRUE)
   
   par(mfrow=c(1,3))
-  plot_plspm_traits_dfs(aesthetic_pls$path_coefs, aesthetic_pls$p_values, significative_level = 0.1 ,title = "Aesthetic scenario")
-  plot_plspm_traits_dfs(narrative_pls$path_coefs, narrative_pls$p_values, significative_level = 0.1, title = "Narrative scenario")
-  plot_plspm_traits_dfs(objectives_pls$path_coefs, objectives_pls$p_values, significative_level = 0.1, title = "Objectives scenario")
+  plot_plspm_traits_dfs(aesthetic_pls$path_coefs, aesthetic_pls$p_values, significative_level = 0.1 ,title = "Aesthetic scenario", color_lim = color_lim)
+  plot_plspm_traits_dfs(narrative_pls$path_coefs, narrative_pls$p_values, significative_level = 0.1, title = "Narrative scenario", color_lim = color_lim)
+  plot_plspm_traits_dfs(objectives_pls$path_coefs, objectives_pls$p_values, significative_level = 0.1, title = "Objectives scenario", color_lim = color_lim)
   mtext("Significative level = 0.10", line = -6, outer = TRUE)
 }
