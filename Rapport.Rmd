@@ -1,8 +1,17 @@
 ---
-title: "PFE : Analyse des données questionnaire"
-output: html_notebook
+title: 'PFE : Analyse des données questionnaire'
+output:
+  pdf_document: default
+  html_notebook: default
+header-includes:
+ \usepackage{float}
 ---
 
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=7, fig.height=10)
+
+```
 
 ```{r}
 source("LoadData.R", encoding = "UTF-8")
@@ -11,6 +20,9 @@ source("PLS_functions.R")
 ```
 
 ```{r}
+layout(matrix(c(1,2,
+                3,4,
+                5,0), 3, 2, byrow = TRUE))
 hist(aesthetic_df$aesthetic, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Esthétique", xlab="Score Esthétique")
 mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$aesthetic)$p.value, 3)), line = -2)
 hist(aesthetic_df$challenge, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Défi", xlab="Score Défi")
@@ -24,6 +36,9 @@ mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$socia
 ```
 
 ```{r}
+layout(matrix(c(1,0,
+                2,3,
+                4,5), 3, 2, byrow = TRUE))
 scenario_bp("challenge_skill_balance")
 scenario_bp("action_awareness")
 scenario_bp("clear_goals")
@@ -37,6 +52,9 @@ scenario_bp("engagement", y_range=c(0, 7))
 ```
 
 ```{r}
+layout(matrix(c(1,0,
+                2,3,
+                4,5), 3, 2, byrow = TRUE))
 order_bp("challenge_skill_balance")
 order_bp("action_awareness")
 order_bp("clear_goals")
@@ -50,6 +68,8 @@ order_bp("engagement", y_range=c(0, 7))
 ```
 
 ```{r}
+layout(matrix(c(1,0,
+                2,3), 2, 2, byrow = TRUE))
 scenario_order_bp("challenge_skill_balance", order = 1)
 scenario_order_bp("action_awareness", order = 1)
 scenario_order_bp("clear_goals", order = 1)
@@ -63,6 +83,9 @@ scenario_order_bp("engagement", y_range=c(0, 7), order = 1)
 ```
 
 ```{r}
+layout(matrix(c(1,2,
+                3,4,
+                5,6), 3, 2, byrow = TRUE))
 scenario_order_bp("challenge_skill_balance", order = 2)
 scenario_order_bp("action_awareness", order = 2)
 scenario_order_bp("clear_goals", order = 2)
@@ -76,6 +99,9 @@ scenario_order_bp("engagement", y_range=c(0, 7), order = 2)
 ```
 
 ```{r}
+layout(matrix(c(1,0,
+                2,3,
+                4,5), 3, 2, byrow = TRUE))
 scenario_order_bp("challenge_skill_balance", order = 3)
 scenario_order_bp("action_awareness", order = 3)
 scenario_order_bp("clear_goals", order = 3)
@@ -89,6 +115,9 @@ scenario_order_bp("engagement", y_range=c(0, 7), order = 3)
 ```
 
 ```{r}
+layout(matrix(c(1,0,
+                2,3,
+                4,5), 3, 2, byrow = TRUE))
 order_scenario_bp("challenge_skill_balance", scenario = "aesthetic")
 order_scenario_bp("action_awareness", scenario = "aesthetic")
 order_scenario_bp("clear_goals", scenario = "aesthetic")
@@ -102,6 +131,9 @@ order_scenario_bp("engagement", y_range=c(0, 7), scenario = "aesthetic")
 ```
 
 ```{r}
+layout(matrix(c(1,2,
+                3,4,
+                5,6), 3, 2, byrow = TRUE))
 order_scenario_bp("challenge_skill_balance", scenario = "narrative")
 order_scenario_bp("action_awareness", scenario = "narrative")
 order_scenario_bp("clear_goals", scenario = "narrative")
@@ -115,6 +147,7 @@ order_scenario_bp("engagement", y_range=c(0, 7), scenario = "narrative")
 ```
 
 ```{r}
+layout(matrix(c(1,2), 1, 2, byrow = TRUE))
 order_scenario_bp("challenge_skill_balance", scenario = "objectives")
 order_scenario_bp("action_awareness", scenario = "objectives")
 order_scenario_bp("clear_goals", scenario = "objectives")
@@ -127,21 +160,37 @@ order_scenario_bp("autotelic_experience", scenario = "objectives")
 order_scenario_bp("engagement", y_range=c(0, 7), scenario = "objectives")
 ```
 ```{r}
-pls_analysis(aesthetic_df, narrative_df, objectives_df)
+pls_analysis(aesthetic_df, narrative_df, objectives_df,
+             "Aesthetic Scenario", "Narrative Scenario", "Objectives Scenario",
+             color_lim = NULL)
 ```
 ```{r}
-pls_analysis(aesthetic_first, narrative_first, objectives_first, color_lim = NULL)
+pls_analysis(aesthetic_first, narrative_first, objectives_first,
+             "Aesthetic Scenario - 1st", "Narrative Scenario - 1st", "Objectives Scenario - 1st",
+             color_lim = NULL)
 ```
 
 ```{r}
-pls_analysis(aesthetic_second, narrative_second, objectives_second, color_lim = NULL)
+pls_analysis(aesthetic_second, narrative_second, objectives_second,
+             "Aesthetic Scenario - 2nd", "Narrative Scenario - 2nd", "Objectives Scenario - 2nd",
+             color_lim = NULL)
 ```
 
 ```{r}
-pls_analysis(aesthetic_third, narrative_third, objectives_third, color_lim = NULL)
+pls_analysis(aesthetic_third, narrative_third, objectives_third,
+             "Aesthetic Scenario - 3rd", "Narrative Scenario - 3rd", "Objectives Scenario - 3rd",
+             color_lim = NULL)
 ```
 ```{r}
 pls_analysis(bind_rows(aesthetic_second, aesthetic_third),
              bind_rows(narrative_second, narrative_third),
-             bind_rows(objectives_second, objectives_third))
+             bind_rows(objectives_second, objectives_third), 
+             "Aesthetic Scenario - 2nd / 3rd", "Narrative Scenario - 2nd / 3rd", "Objectives Scenario - 2nd / 3rd",
+             color_lim = NULL)
+```
+
+```{r}
+pls_analysis(first_df=first_df, second_df=second_df, third_df=third_df, 
+             "1st", "2nd", "3rd",
+             color_lim = NULL)
 ```

@@ -255,45 +255,43 @@ plot_plspm_traits_dfs = function(path_coefs, p_values, significative_level = 0.0
   corrplot(path_coefs, title=title, method="number",
            sig.level = significative_level, p.mat = p_values, 
            is.corr = FALSE, cl.lim = color_lim, col=brewer.pal(n=8, name="PuOr"),
-           insig = "blank",  mar=c(0,0,2,0))
+           insig = "blank",  mar=c(0,0,1,0))
 }
 
-pls_analysis = function(aesthetic_df, narrative_df, objectives_df, type=1, color_lim = c(-1, 1)){
+pls_analysis = function(first_df, second_df, third_df, first_title, second_title, third_title, type=1, color_lim = c(-1, 1)){
   if(type==1){
-    aesthetic_pls = plspm_traits_dfs(aesthetic_df)
-    narrative_pls = plspm_traits_dfs(narrative_df)
-    objectives_pls = plspm_traits_dfs(objectives_df)
+    first_pls = plspm_traits_dfs(first_df)
+    second_pls = plspm_traits_dfs(second_df)
+    third_pls = plspm_traits_dfs(third_df)
   }else if(type==2){
-    aesthetic_pls = plspm_traits_dfs_2(aesthetic_df)
-    narrative_pls = plspm_traits_dfs_2(narrative_df)
-    objectives_pls = plspm_traits_dfs_2(objectives_df)
+    first_pls = plspm_traits_dfs_2(first_df)
+    second_pls = plspm_traits_dfs_2(second_df)
+    third_pls = plspm_traits_dfs_2(third_df)
   }else if(type==3){
-    aesthetic_pls = plspm_traits_dfs_3(aesthetic_df)
-    narrative_pls = plspm_traits_dfs_3(narrative_df)
-    objectives_pls = plspm_traits_dfs_3(objectives_df)
+    first_pls = plspm_traits_dfs_3(first_df)
+    second_pls = plspm_traits_dfs_3(second_df)
+    third_pls = plspm_traits_dfs_3(third_df)
   }else if(type==4){
-    aesthetic_pls = plspm_traits_dfs_4(aesthetic_df)
-    narrative_pls = plspm_traits_dfs_4(narrative_df)
-    objectives_pls = plspm_traits_dfs_4(objectives_df)
+    first_pls = plspm_traits_dfs_4(first_df)
+    second_pls = plspm_traits_dfs_4(second_df)
+    third_pls = plspm_traits_dfs_4(third_df)
   }else if(type==5){
-    aesthetic_pls = plspm_traits_dfs_5(aesthetic_df)
-    narrative_pls = plspm_traits_dfs_5(narrative_df)
-    objectives_pls = plspm_traits_dfs_5(objectives_df)
+    first_pls = plspm_traits_dfs_5(first_df)
+    second_pls = plspm_traits_dfs_5(second_df)
+    third_pls = plspm_traits_dfs_5(third_df)
   }else if(type==6){
-    aesthetic_pls = plspm_traits_dfs_6(aesthetic_df)
-    narrative_pls = plspm_traits_dfs_6(narrative_df)
-    objectives_pls = plspm_traits_dfs_6(objectives_df)
+    first_pls = plspm_traits_dfs_6(first_df)
+    second_pls = plspm_traits_dfs_6(second_df)
+    third_pls = plspm_traits_dfs_6(third_df)
   }
   
-  par(mfrow = c(1,3))
-  plot_plspm_traits_dfs(aesthetic_pls$path_coefs, aesthetic_pls$p_values, title = "Aesthetic scenario", color_lim = color_lim)
-  plot_plspm_traits_dfs(narrative_pls$path_coefs, narrative_pls$p_values, title = "Narrative scenario", color_lim = color_lim)
-  plot_plspm_traits_dfs(objectives_pls$path_coefs, objectives_pls$p_values, title = "Objectives scenario", color_lim = color_lim)
-  mtext("Significative level = 0.05", line=-6, outer = TRUE)
-  
-  par(mfrow=c(1,3))
-  plot_plspm_traits_dfs(aesthetic_pls$path_coefs, aesthetic_pls$p_values, significative_level = 0.1 ,title = "Aesthetic scenario", color_lim = color_lim)
-  plot_plspm_traits_dfs(narrative_pls$path_coefs, narrative_pls$p_values, significative_level = 0.1, title = "Narrative scenario", color_lim = color_lim)
-  plot_plspm_traits_dfs(objectives_pls$path_coefs, objectives_pls$p_values, significative_level = 0.1, title = "Objectives scenario", color_lim = color_lim)
-  mtext("Significative level = 0.10", line = -6, outer = TRUE)
+  par(mfcol = c(3,2))
+  plot_plspm_traits_dfs(first_pls$path_coefs, first_pls$p_values, title = first_title, color_lim = color_lim)
+  plot_plspm_traits_dfs(second_pls$path_coefs, second_pls$p_values, title = second_title, color_lim = color_lim)
+  plot_plspm_traits_dfs(third_pls$path_coefs, third_pls$p_values, title = third_title, color_lim = color_lim)
+  mtext("Significative level = 0.05", line=-2, side=2, outer = TRUE)
+  plot_plspm_traits_dfs(first_pls$path_coefs, first_pls$p_values, significative_level = 0.1 ,title = first_title, color_lim = color_lim)
+  plot_plspm_traits_dfs(second_pls$path_coefs, second_pls$p_values, significative_level = 0.1, title = second_title, color_lim = color_lim)
+  plot_plspm_traits_dfs(third_pls$path_coefs, third_pls$p_values, significative_level = 0.1, title = third_title, color_lim = color_lim)
+  mtext("Significative level = 0.10", line = -1, side=4, outer = TRUE)
 }
