@@ -9,7 +9,7 @@ header-includes:
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(fig.width=7, fig.height=10)
+knitr::opts_chunk$set(fig.width=8, fig.height=10)
 
 ```
 
@@ -34,16 +34,33 @@ mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$objec
 hist(aesthetic_df$social, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Social", xlab="Score Social")
 mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$social)$p.value, 3)), line = -2)
 ```
+```{r}
+layout(matrix(c(1,2,3), 1, 3, byrow = TRUE))
+
+game_frequency = count(aesthetic_df, aesthetic_df$a.quelle.frequence.jouez.vous.aux.jeux.videos..)
+barplot(game_frequency$n, names.arg = game_frequency$`aesthetic_df$a.quelle.frequence.jouez.vous.aux.jeux.videos..`, ylim=c(0, 25))
+
+vr_experience = count(aesthetic_df, aesthetic_df$quel.est.votre.niveau.de.maitrise.de.la.realite.virtuelle..)
+vr_experience = bind_cols(vr_experience, order=c(3, 1, 4, 2))
+vr_experience = arrange(vr_experience, order)
+vr_experience = bind_cols(experience = word(vr_experience$`aesthetic_df$quel.est.votre.niveau.de.maitrise.de.la.realite.virtuelle..`), n = vr_experience$n)
+barplot(vr_experience$n, names.arg = vr_experience$experience)
+
+site = count(aesthetic_df, aesthetic_df$sur.quel.site.allez.vous.participer.a.l.experimentation..)
+barplot(site$n, names.arg = site$`aesthetic_df$sur.quel.site.allez.vous.participer.a.l.experimentation..`, ylim=c(0, 25))
+```
+
 
 ```{r}
-layout(matrix(c(1,0,
-                2,3,
-                4,5), 3, 2, byrow = TRUE))
+layout(matrix(c(1,2,3,
+                4,5,0), 2, 3, byrow = TRUE))
 scenario_bp("challenge_skill_balance")
 scenario_bp("action_awareness")
 scenario_bp("clear_goals")
 scenario_bp("unambiguous_feedback")
 scenario_bp("concentration")
+layout(matrix(c(1,2,3,
+                4,5,0), 2, 3, byrow = TRUE))
 scenario_bp("sense_of_control")
 scenario_bp("loss_self_consciousness")
 scenario_bp("time_transformation")
@@ -52,14 +69,15 @@ scenario_bp("engagement", y_range=c(0, 7))
 ```
 
 ```{r}
-layout(matrix(c(1,0,
-                2,3,
-                4,5), 3, 2, byrow = TRUE))
+layout(matrix(c(1,2,3,
+                4,5,0), 2, 3, byrow = TRUE))
 order_bp("challenge_skill_balance")
 order_bp("action_awareness")
 order_bp("clear_goals")
 order_bp("unambiguous_feedback")
 order_bp("concentration")
+layout(matrix(c(1,2,3,
+                4,5,0), 2, 3, byrow = TRUE))
 order_bp("sense_of_control")
 order_bp("loss_self_consciousness")
 order_bp("time_transformation")
@@ -68,102 +86,129 @@ order_bp("engagement", y_range=c(0, 7))
 ```
 
 ```{r}
-layout(matrix(c(1,0,
-                2,3), 2, 2, byrow = TRUE))
+layout(matrix(c(1,2,3,
+                4,5,6), 2, 3, byrow = TRUE))
 scenario_order_bp("challenge_skill_balance", order = 1)
-scenario_order_bp("action_awareness", order = 1)
-scenario_order_bp("clear_goals", order = 1)
-scenario_order_bp("unambiguous_feedback", order = 1)
-scenario_order_bp("concentration", order = 1)
-scenario_order_bp("sense_of_control", order = 1)
-scenario_order_bp("loss_self_consciousness", order = 1)
-scenario_order_bp("time_transformation", order = 1)
-scenario_order_bp("autotelic_experience", order = 1)
-scenario_order_bp("engagement", y_range=c(0, 7), order = 1)
-```
-
-```{r}
-layout(matrix(c(1,2,
-                3,4,
-                5,6), 3, 2, byrow = TRUE))
 scenario_order_bp("challenge_skill_balance", order = 2)
-scenario_order_bp("action_awareness", order = 2)
-scenario_order_bp("clear_goals", order = 2)
-scenario_order_bp("unambiguous_feedback", order = 2)
-scenario_order_bp("concentration", order = 2)
-scenario_order_bp("sense_of_control", order = 2)
-scenario_order_bp("loss_self_consciousness", order = 2)
-scenario_order_bp("time_transformation", order = 2)
-scenario_order_bp("autotelic_experience", order = 2)
-scenario_order_bp("engagement", y_range=c(0, 7), order = 2)
-```
-
-```{r}
-layout(matrix(c(1,0,
-                2,3,
-                4,5), 3, 2, byrow = TRUE))
 scenario_order_bp("challenge_skill_balance", order = 3)
+scenario_order_bp("action_awareness", order = 1)
+scenario_order_bp("action_awareness", order = 2)
 scenario_order_bp("action_awareness", order = 3)
+layout(matrix(c(1,2,3,
+                4,5,6), 2, 3, byrow = TRUE))
+scenario_order_bp("clear_goals", order = 1)
+scenario_order_bp("clear_goals", order = 2)
 scenario_order_bp("clear_goals", order = 3)
+scenario_order_bp("unambiguous_feedback", order = 1)
+scenario_order_bp("unambiguous_feedback", order = 2)
 scenario_order_bp("unambiguous_feedback", order = 3)
+layout(matrix(c(1,2,3,
+                4,5,6), 2, 3, byrow = TRUE))
+scenario_order_bp("concentration", order = 1)
+scenario_order_bp("concentration", order = 2)
 scenario_order_bp("concentration", order = 3)
+scenario_order_bp("sense_of_control", order = 1)
+scenario_order_bp("sense_of_control", order = 2)
 scenario_order_bp("sense_of_control", order = 3)
+layout(matrix(c(1,2,3,
+                4,5,6), 2, 3, byrow = TRUE))
+scenario_order_bp("loss_self_consciousness", order = 1)
+scenario_order_bp("loss_self_consciousness", order = 2)
 scenario_order_bp("loss_self_consciousness", order = 3)
+scenario_order_bp("time_transformation", order = 1)
+scenario_order_bp("time_transformation", order = 2)
 scenario_order_bp("time_transformation", order = 3)
+layout(matrix(c(1,2,3,
+                4,5,6), 2, 3, byrow = TRUE))
+scenario_order_bp("autotelic_experience", order = 1)
+scenario_order_bp("autotelic_experience", order = 2)
 scenario_order_bp("autotelic_experience", order = 3)
+scenario_order_bp("engagement", y_range=c(0, 7), order = 1)
+scenario_order_bp("engagement", y_range=c(0, 7), order = 2)
 scenario_order_bp("engagement", y_range=c(0, 7), order = 3)
 ```
 
 ```{r}
-layout(matrix(c(1,0,
-                2,3,
-                4,5), 3, 2, byrow = TRUE))
+layout(matrix(c(1,2,3,
+                4,5,6), 2, 3, byrow = TRUE))
 order_scenario_bp("challenge_skill_balance", scenario = "aesthetic")
-order_scenario_bp("action_awareness", scenario = "aesthetic")
-order_scenario_bp("clear_goals", scenario = "aesthetic")
-order_scenario_bp("unambiguous_feedback", scenario = "aesthetic")
-order_scenario_bp("concentration", scenario = "aesthetic")
-order_scenario_bp("sense_of_control", scenario = "aesthetic")
-order_scenario_bp("loss_self_consciousness", scenario = "aesthetic")
-order_scenario_bp("time_transformation", scenario = "aesthetic")
-order_scenario_bp("autotelic_experience", scenario = "aesthetic")
-order_scenario_bp("engagement", y_range=c(0, 7), scenario = "aesthetic")
-```
-
-```{r}
-layout(matrix(c(1,2,
-                3,4,
-                5,6), 3, 2, byrow = TRUE))
 order_scenario_bp("challenge_skill_balance", scenario = "narrative")
-order_scenario_bp("action_awareness", scenario = "narrative")
-order_scenario_bp("clear_goals", scenario = "narrative")
-order_scenario_bp("unambiguous_feedback", scenario = "narrative")
-order_scenario_bp("concentration", scenario = "narrative")
-order_scenario_bp("sense_of_control", scenario = "narrative")
-order_scenario_bp("loss_self_consciousness", scenario = "narrative")
-order_scenario_bp("time_transformation", scenario = "narrative")
-order_scenario_bp("autotelic_experience", scenario = "narrative")
-order_scenario_bp("engagement", y_range=c(0, 7), scenario = "narrative")
-```
-
-```{r}
-layout(matrix(c(1,2), 1, 2, byrow = TRUE))
 order_scenario_bp("challenge_skill_balance", scenario = "objectives")
+order_scenario_bp("action_awareness", scenario = "aesthetic")
+order_scenario_bp("action_awareness", scenario = "narrative")
 order_scenario_bp("action_awareness", scenario = "objectives")
+layout(matrix(c(1,2,3,
+                4,5,6), 2, 3, byrow = TRUE))
+order_scenario_bp("clear_goals", scenario = "aesthetic")
+order_scenario_bp("clear_goals", scenario = "narrative")
 order_scenario_bp("clear_goals", scenario = "objectives")
+order_scenario_bp("unambiguous_feedback", scenario = "aesthetic")
+order_scenario_bp("unambiguous_feedback", scenario = "narrative")
 order_scenario_bp("unambiguous_feedback", scenario = "objectives")
+layout(matrix(c(1,2,3,
+                4,5,6), 2, 3, byrow = TRUE))
+order_scenario_bp("concentration", scenario = "aesthetic")
+order_scenario_bp("concentration", scenario = "narrative")
 order_scenario_bp("concentration", scenario = "objectives")
+order_scenario_bp("sense_of_control", scenario = "aesthetic")
+order_scenario_bp("sense_of_control", scenario = "narrative")
 order_scenario_bp("sense_of_control", scenario = "objectives")
+layout(matrix(c(1,2,3,
+                4,5,6), 2, 3, byrow = TRUE))
+order_scenario_bp("loss_self_consciousness", scenario = "aesthetic")
+order_scenario_bp("loss_self_consciousness", scenario = "narrative")
 order_scenario_bp("loss_self_consciousness", scenario = "objectives")
+order_scenario_bp("time_transformation", scenario = "aesthetic")
+order_scenario_bp("time_transformation", scenario = "narrative")
 order_scenario_bp("time_transformation", scenario = "objectives")
+layout(matrix(c(1,2,3,
+                4,5,6), 2, 3, byrow = TRUE))
+order_scenario_bp("autotelic_experience", scenario = "aesthetic")
+order_scenario_bp("autotelic_experience", scenario = "narrative")
 order_scenario_bp("autotelic_experience", scenario = "objectives")
+order_scenario_bp("engagement", y_range=c(0, 7), scenario = "aesthetic")
+order_scenario_bp("engagement", y_range=c(0, 7), scenario = "narrative")
 order_scenario_bp("engagement", y_range=c(0, 7), scenario = "objectives")
 ```
+```{r}
+layout(matrix(c(1,2,3,
+                4,5,0), 2, 3, byrow = TRUE))
+site_bp("challenge_skill_balance")
+site_bp("action_awareness")
+site_bp("clear_goals")
+site_bp("unambiguous_feedback")
+site_bp("concentration")
+layout(matrix(c(1,2,3,
+                4,5,0), 2, 3, byrow = TRUE))
+site_bp("sense_of_control")
+site_bp("loss_self_consciousness")
+site_bp("time_transformation")
+site_bp("autotelic_experience")
+site_bp("engagement", y_range=c(0, 7))
+```
+```{r}
+layout(matrix(c(1,2,3,
+                4,5,0), 2, 3, byrow = TRUE))
+game_bp("challenge_skill_balance")
+game_bp("action_awareness")
+game_bp("clear_goals")
+game_bp("unambiguous_feedback")
+game_bp("concentration")
+layout(matrix(c(1,2,3,
+                4,5,0), 2, 3, byrow = TRUE))
+game_bp("sense_of_control")
+game_bp("loss_self_consciousness")
+game_bp("time_transformation")
+game_bp("autotelic_experience")
+game_bp("engagement", y_range=c(0, 7))
+```
+
 ```{r}
 pls_analysis(aesthetic_df, narrative_df, objectives_df,
              "Aesthetic Scenario", "Narrative Scenario", "Objectives Scenario",
              color_lim = NULL)
 ```
+
 ```{r}
 pls_analysis(aesthetic_first, narrative_first, objectives_first,
              "Aesthetic Scenario - 1st", "Narrative Scenario - 1st", "Objectives Scenario - 1st",
@@ -181,6 +226,7 @@ pls_analysis(aesthetic_third, narrative_third, objectives_third,
              "Aesthetic Scenario - 3rd", "Narrative Scenario - 3rd", "Objectives Scenario - 3rd",
              color_lim = NULL)
 ```
+
 ```{r}
 pls_analysis(bind_rows(aesthetic_second, aesthetic_third),
              bind_rows(narrative_second, narrative_third),

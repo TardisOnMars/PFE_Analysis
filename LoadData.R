@@ -29,8 +29,6 @@ colnames(traits) = stri_trans_general(tolower(colnames(traits)), "Latin-ASCII")
 traits <- filter(traits, horodateur >= "2021-05-21")
 traits <- filter(traits, !identifiant.participant %in% c(8, 9, 12, 13, 21, 23, 27, 31, 33, 36, 54, 27))
 
-# traits <- filter(traits, a.quelle.frequence.jouez.vous.aux.jeux.videos.. != "Jamais")
-
 # Erase double from data
 traits <- distinct(traits, adresse.e.mail, .keep_all = TRUE)
 
@@ -91,3 +89,12 @@ objectives_first = filter(objectives_df, est.ce.votre.premiere..deuxieme.ou.troi
 objectives_second = filter(objectives_df, est.ce.votre.premiere..deuxieme.ou.troisieme.experience.. == "Deuxième")
 objectives_third = filter(objectives_df, est.ce.votre.premiere..deuxieme.ou.troisieme.experience.. == "Troisième")
 
+# Separate data depending on site
+enise_df = filter(traits_dfs_df, sur.quel.site.allez.vous.participer.a.l.experimentation.. == "ENISE (Saint-Etienne)")
+insa_df = filter(traits_dfs_df, sur.quel.site.allez.vous.participer.a.l.experimentation.. == "INSA Lyon")
+
+# Separate data depending on game experience
+nevergame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Jamais")
+lowgame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Occasionnellement")
+midgame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Régulièrement")
+highgame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Tous les jours")

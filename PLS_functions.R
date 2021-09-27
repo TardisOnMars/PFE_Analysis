@@ -291,7 +291,13 @@ pls_analysis = function(first_df, second_df, third_df, first_title, second_title
   plot_plspm_traits_dfs(third_pls$path_coefs, third_pls$p_values, title = third_title, color_lim = color_lim)
   mtext("Significative level = 0.05", line=-2, side=2, outer = TRUE)
   plot_plspm_traits_dfs(first_pls$path_coefs, first_pls$p_values, significative_level = 0.1 ,title = first_title, color_lim = color_lim)
+  print(first_pls$p_values)
+  print(first_pls$path_coefs)
   plot_plspm_traits_dfs(second_pls$path_coefs, second_pls$p_values, significative_level = 0.1, title = second_title, color_lim = color_lim)
+  print(second_pls$p_values)
+  print(second_pls$path_coefs)
   plot_plspm_traits_dfs(third_pls$path_coefs, third_pls$p_values, significative_level = 0.1, title = third_title, color_lim = color_lim)
+  print(third_pls$p_values)
+  print(third_pls$path_coefs)
   mtext("Significative level = 0.10", line = -1, side=4, outer = TRUE)
 }
