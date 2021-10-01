@@ -2,13 +2,18 @@ library(stringr)
 source("LoadData.R",encoding="utf-8")
 
 scenario_bp = function(dimension = "", y_range=c(0,28)){
+  
   sumaov <- summary.aov(aov(traits_dfs_df[[dimension]] ~ qu.avez.vous.vu.lors.de.l.experience..,data=traits_dfs_df))
   if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-    boxplot(data.frame(Objectives=objectives_df[[dimension]],
-                     Aesthetic=aesthetic_df[[dimension]],
-                     Narrative=narrative_df[[dimension]]), ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
-    mtext(paste(str_to_title(dimension), "\n All Orders"), line=1)
-    mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
+    dimensions_df = data.frame(Objectives=objectives_df[[dimension]],
+                               Aesthetic=aesthetic_df[[dimension]],
+                               Narrative=narrative_df[[dimension]])
+    boxplot(dimensions_df, ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
+    means <- colMeans(dimensions_df)
+    points(means, col = "red", pch = 19, cex=1.5)
+    
+    #mtext(paste(str_to_title(dimension), "\n All Orders"), line=1)
+    #mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
   }
 }
 

@@ -93,8 +93,12 @@ objectives_third = filter(objectives_df, est.ce.votre.premiere..deuxieme.ou.troi
 enise_df = filter(traits_dfs_df, sur.quel.site.allez.vous.participer.a.l.experimentation.. == "ENISE (Saint-Etienne)")
 insa_df = filter(traits_dfs_df, sur.quel.site.allez.vous.participer.a.l.experimentation.. == "INSA Lyon")
 
+# Separate data depending on site AND scenario ??
+
 # Separate data depending on game experience
 nevergame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Jamais")
 lowgame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Occasionnellement")
 midgame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Régulièrement")
 highgame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Tous les jours")
+
+# Separate data depending on game experience AND scenario ??

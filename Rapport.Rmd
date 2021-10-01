@@ -22,32 +22,89 @@ source("PLS_functions.R")
 ```{r}
 layout(matrix(c(1,2,
                 3,4,
-                5,0), 3, 2, byrow = TRUE))
-hist(aesthetic_df$aesthetic, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Esthétique", xlab="Score Esthétique")
+                5), 1, 5, byrow = TRUE))
+hist(aesthetic_df$aesthetic, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="Aesthetic Score")
 mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$aesthetic)$p.value, 3)), line = -2)
-hist(aesthetic_df$challenge, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Défi", xlab="Score Défi")
+hist(aesthetic_df$challenge, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="Challenge Score")
 mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$challenge)$p.value, 3)), line = -2)
-hist(aesthetic_df$narrative, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Narration", xlab="Score Narration")
+hist(aesthetic_df$narrative, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="Narration Score")
 mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$narrative)$p.value, 3)), line = -2)
-hist(aesthetic_df$objectives, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Objectifs", xlab="Score Objectifs")
+hist(aesthetic_df$objectives, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="Objectives Score")
 mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$objectives)$p.value, 3)), line = -2)
-hist(aesthetic_df$social, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Social", xlab="Score Social")
+hist(aesthetic_df$social, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="Social Score")
 mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$social)$p.value, 3)), line = -2)
+
+mtext("All Participants", line = -1, side=4, outer = TRUE)
 ```
 ```{r}
-layout(matrix(c(1,2,3), 1, 3, byrow = TRUE))
+layout(matrix(c(1,2,
+                3,4,
+                5,0), 3, 2, byrow = TRUE))
+hist(insa_df$aesthetic, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Esthétique", xlab="Score Esthétique")
+mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$aesthetic)$p.value, 3)), line = -2)
+hist(insa_df$challenge, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Défi", xlab="Score Défi")
+mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$challenge)$p.value, 3)), line = -2)
+hist(insa_df$narrative, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Narration", xlab="Score Narration")
+mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$narrative)$p.value, 3)), line = -2)
+hist(insa_df$objectives, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Objectifs", xlab="Score Objectifs")
+mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$objectives)$p.value, 3)), line = -2)
+hist(insa_df$social, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Social", xlab="Score Social")
+mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$social)$p.value, 3)), line = -2)
+mtext("INSA Participants", line = -1, side=4, outer = TRUE)
+```
+```{r}
+layout(matrix(c(1,2,
+                3,4,
+                5,0), 3, 2, byrow = TRUE))
+hist(enise_df$aesthetic, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Esthétique", xlab="Score Esthétique")
+mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$aesthetic)$p.value, 3)), line = -2)
+hist(enise_df$challenge, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Défi", xlab="Score Défi")
+mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$challenge)$p.value, 3)), line = -2)
+hist(enise_df$narrative, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Narration", xlab="Score Narration")
+mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$narrative)$p.value, 3)), line = -2)
+hist(enise_df$objectives, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Objectifs", xlab="Score Objectifs")
+mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$objectives)$p.value, 3)), line = -2)
+hist(enise_df$social, xlim=c(0, 100), ylim=c(0, 15), main="Répartition du score Social", xlab="Score Social")
+mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$social)$p.value, 3)), line = -2)
+
+mtext("ENISE Participants", line = -1, side=4, outer = TRUE)
+```
+
+```{r}
+layout(matrix(c(1,2), 1, 2, byrow = TRUE))
 
 game_frequency = count(aesthetic_df, aesthetic_df$a.quelle.frequence.jouez.vous.aux.jeux.videos..)
 barplot(game_frequency$n, names.arg = game_frequency$`aesthetic_df$a.quelle.frequence.jouez.vous.aux.jeux.videos..`, ylim=c(0, 25))
+mtext("Fréquence de jeu", line = 2, side=2)
+
+site = count(aesthetic_df, aesthetic_df$sur.quel.site.allez.vous.participer.a.l.experimentation..)
+barplot(site$n, names.arg = site$`aesthetic_df$sur.quel.site.allez.vous.participer.a.l.experimentation..`, ylim=c(0, 25))
+mtext("Repartition du site d'experimentation", line=2, side=2)
+
+layout(matrix(c(1,2,3), 1, 3, byrow = TRUE))
 
 vr_experience = count(aesthetic_df, aesthetic_df$quel.est.votre.niveau.de.maitrise.de.la.realite.virtuelle..)
 vr_experience = bind_cols(vr_experience, order=c(3, 1, 4, 2))
 vr_experience = arrange(vr_experience, order)
 vr_experience = bind_cols(experience = word(vr_experience$`aesthetic_df$quel.est.votre.niveau.de.maitrise.de.la.realite.virtuelle..`), n = vr_experience$n)
-barplot(vr_experience$n, names.arg = vr_experience$experience)
+barplot(vr_experience$n, names.arg = vr_experience$experience, width=1)
+mtext("Experience avec la VR - All Participants", line = 2, side=2)
 
-site = count(aesthetic_df, aesthetic_df$sur.quel.site.allez.vous.participer.a.l.experimentation..)
-barplot(site$n, names.arg = site$`aesthetic_df$sur.quel.site.allez.vous.participer.a.l.experimentation..`, ylim=c(0, 25))
+insa_df_unique = filter(insa_df, est.ce.votre.premiere..deuxieme.ou.troisieme.experience.. == "Première")
+vr_experience = count(insa_df_unique, insa_df_unique$quel.est.votre.niveau.de.maitrise.de.la.realite.virtuelle..)
+vr_experience = bind_cols(vr_experience, order=c(3, 1, 4, 2))
+vr_experience = arrange(vr_experience, order)
+vr_experience = bind_cols(experience = word(vr_experience$`insa_df_unique$quel.est.votre.niveau.de.maitrise.de.la.realite.virtuelle..`), n = vr_experience$n)
+barplot(vr_experience$n, names.arg = vr_experience$experience, ylim=c(0, 25))
+mtext("Experience avec la VR - INSA Participants", line = 2, side=2)
+
+enise_df_unique = filter(enise_df, est.ce.votre.premiere..deuxieme.ou.troisieme.experience.. == "Première")
+vr_experience = count(enise_df_unique, enise_df_unique$quel.est.votre.niveau.de.maitrise.de.la.realite.virtuelle..)
+vr_experience = bind_cols(vr_experience, order=c(3, 1, 4, 2))
+vr_experience = arrange(vr_experience, order)
+vr_experience = bind_cols(experience = word(vr_experience$`enise_df_unique$quel.est.votre.niveau.de.maitrise.de.la.realite.virtuelle..`), n = vr_experience$n)
+barplot(vr_experience$n, names.arg = vr_experience$experience, ylim=c(0, 25))
+mtext("Experience avec la VR - ENISE Participants", line = 2, side=2)
 ```
 
 
@@ -62,6 +119,23 @@ scenario_bp("concentration")
 layout(matrix(c(1,2,3,
                 4,5,0), 2, 3, byrow = TRUE))
 scenario_bp("sense_of_control")
+scenario_bp("loss_self_consciousness")
+scenario_bp("time_transformation")
+scenario_bp("autotelic_experience")
+scenario_bp("engagement", y_range=c(0, 7))
+```
+```{r}
+par(mar = c(2, 3, 0, 0.3), cex=1.5)
+scenario_bp("challenge_skill_balance")
+mtext("Score", side=2, line=2, cex=1.75)
+scenario_bp("action_awareness")
+scenario_bp("clear_goals")
+scenario_bp("unambiguous_feedback")
+scenario_bp("concentration")
+
+par(mar = c(2, 3, 0, 0.3), cex=1.5)
+scenario_bp("sense_of_control")
+mtext("Score", side=2, line=2, cex=1.75)
 scenario_bp("loss_self_consciousness")
 scenario_bp("time_transformation")
 scenario_bp("autotelic_experience")
@@ -171,15 +245,11 @@ order_scenario_bp("engagement", y_range=c(0, 7), scenario = "narrative")
 order_scenario_bp("engagement", y_range=c(0, 7), scenario = "objectives")
 ```
 ```{r}
-layout(matrix(c(1,2,3,
-                4,5,0), 2, 3, byrow = TRUE))
 site_bp("challenge_skill_balance")
 site_bp("action_awareness")
 site_bp("clear_goals")
 site_bp("unambiguous_feedback")
 site_bp("concentration")
-layout(matrix(c(1,2,3,
-                4,5,0), 2, 3, byrow = TRUE))
 site_bp("sense_of_control")
 site_bp("loss_self_consciousness")
 site_bp("time_transformation")
@@ -187,15 +257,11 @@ site_bp("autotelic_experience")
 site_bp("engagement", y_range=c(0, 7))
 ```
 ```{r}
-layout(matrix(c(1,2,3,
-                4,5,0), 2, 3, byrow = TRUE))
 game_bp("challenge_skill_balance")
 game_bp("action_awareness")
 game_bp("clear_goals")
 game_bp("unambiguous_feedback")
 game_bp("concentration")
-layout(matrix(c(1,2,3,
-                4,5,0), 2, 3, byrow = TRUE))
 game_bp("sense_of_control")
 game_bp("loss_self_consciousness")
 game_bp("time_transformation")
@@ -239,4 +305,21 @@ pls_analysis(bind_rows(aesthetic_second, aesthetic_third),
 pls_analysis(first_df=first_df, second_df=second_df, third_df=third_df, 
              "1st", "2nd", "3rd",
              color_lim = NULL)
+```
+
+```{r}
+par(mar = c(2, 3, 0, 0.3), cex=1.75)
+hist(aesthetic_df$aesthetic, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="")
+mtext("Frequency", side=2, line=2, cex=1.75)
+par(mar = c(2, 2, 0, 0.3), cex=2)
+hist(aesthetic_df$challenge, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="", ylab="")
+hist(aesthetic_df$narrative, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="", ylab="")
+hist(aesthetic_df$objectives, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="", ylab="")
+hist(aesthetic_df$social, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="", ylab="")
+```
+
+```{r}
+par(mar = c(2, 3, 0, 0.3), cex=1.5)
+scenario_bp("challenge_skill_balance")
+mtext("Score", side=2, line=2, cex=1.75)
 ```
