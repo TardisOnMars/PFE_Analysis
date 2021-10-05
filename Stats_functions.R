@@ -11,6 +11,7 @@ scenario_bp = function(dimension = "", y_range=c(0,28)){
     boxplot(dimensions_df, ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
     means <- colMeans(dimensions_df)
     points(means, col = "red", pch = 19, cex=1.5)
+    mtext("Score", side=2, line=2, cex=1.75)
     
     #mtext(paste(str_to_title(dimension), "\n All Orders"), line=1)
     #mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
@@ -20,11 +21,15 @@ scenario_bp = function(dimension = "", y_range=c(0,28)){
 order_bp = function(dimension = "", y_range=c(0,28)){
   sumaov <- summary.aov(aov(traits_dfs_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=traits_dfs_df))
   if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-    boxplot(data.frame(First=first_df[[dimension]],
-                       Second=second_df[[dimension]],
-                       Third=third_df[[dimension]]), ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
-    mtext(paste(str_to_title(dimension), "\n All Scenario"), line=1)
-    mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
+    dimensions_df = data.frame(First=first_df[[dimension]],
+                               Second=second_df[[dimension]],
+                               Third=third_df[[dimension]])
+    boxplot(dimensions_df, ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
+    means <- colMeans(dimensions_df)
+    points(means, col = "red", pch = 19, cex=1.5)
+    mtext("Score", side=2, line=2, cex=1.75)
+    #mtext(paste(str_to_title(dimension), "\n All Scenario"), line=1)
+    #mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
   }
 }
 
@@ -61,29 +66,41 @@ order_scenario_bp = function(dimension = "", y_range=c(0,28), scenario=""){
   if(scenario == "aesthetic"){
     sumaov <- summary.aov(aov(aesthetic_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=aesthetic_df))
     if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-      boxplot(data.frame(First=aesthetic_first[[dimension]],
-                       Second=aesthetic_second[[dimension]],
-                       Third=aesthetic_third[[dimension]]), ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
+      dimensions_df = data.frame(First=aesthetic_first[[dimension]],
+                                 Second=aesthetic_second[[dimension]],
+                                 Third=aesthetic_third[[dimension]])
+      boxplot(dimensions_df, ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
+      means <- colMeans(dimensions_df)
+      points(means, col = "red", pch = 19, cex=1.5)
+      mtext("Score", side=2, line=2, cex=1.75)
  
     }
   }else if(scenario == "narrative"){
     sumaov <- summary.aov(aov(narrative_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=narrative_df))
     if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-    boxplot(data.frame(First=narrative_first[[dimension]],
-                       Second=narrative_second[[dimension]],
-                       Third=narrative_third[[dimension]]), ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
+      dimensions_df = data.frame(First=narrative_first[[dimension]],
+                                 Second=narrative_second[[dimension]],
+                                 Third=narrative_third[[dimension]])
+    boxplot(dimensions_df, ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
+    means <- colMeans(dimensions_df)
+    points(means, col = "red", pch = 19, cex=1.5)
+    mtext("Score", side=2, line=2, cex=1.75)
     }
   }else if(scenario == "objectives"){
     sumaov <- summary.aov(aov(objectives_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=objectives_df))
     if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-      boxplot(data.frame(First=objectives_first[[dimension]],
-                       Second=objectives_second[[dimension]],
-                       Third=objectives_third[[dimension]]), ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
+      dimensions_df = data.frame(First=objectives_first[[dimension]],
+                                 Second=objectives_second[[dimension]],
+                                 Third=objectives_third[[dimension]])
+      boxplot(dimensions_df, ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
+      means <- colMeans(dimensions_df)
+      points(means, col = "red", pch = 19, cex=1.5)
+      mtext("Score", side=2, line=2, cex=1.75)
     }
   }
   if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-    mtext(paste(str_to_title(dimension), "\n Scenario :" , str_to_title(scenario)), line=1)
-    mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
+    #mtext(paste(str_to_title(dimension), "\n Scenario :" , str_to_title(scenario)), line=1)
+    #mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
   }
 }
 

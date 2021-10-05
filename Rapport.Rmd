@@ -69,6 +69,9 @@ mtext(paste("Shapiro-Wilk normality test", round(shapiro.test(aesthetic_df$socia
 
 mtext("ENISE Participants", line = -1, side=4, outer = TRUE)
 ```
+```{r}
+cor(data.frame(Aesthetic=aesthetic_df[["aesthetic"]], Challenge=aesthetic_df[["challenge"]], Narrative=aesthetic_df[["narrative"]], Objectives=aesthetic_df[["objectives"]], Social=aesthetic_df[["social"]]), method = c("pearson", "kendall", "spearman"))
+```
 
 ```{r}
 layout(matrix(c(1,2), 1, 2, byrow = TRUE))
@@ -107,52 +110,32 @@ barplot(vr_experience$n, names.arg = vr_experience$experience, ylim=c(0, 25))
 mtext("Experience avec la VR - ENISE Participants", line = 2, side=2)
 ```
 
-
 ```{r}
-layout(matrix(c(1,2,3,
-                4,5,0), 2, 3, byrow = TRUE))
+par(mar = c(2, 3, 0, 0.3), cex=1.5)
 scenario_bp("challenge_skill_balance")
 scenario_bp("action_awareness")
 scenario_bp("clear_goals")
 scenario_bp("unambiguous_feedback")
 scenario_bp("concentration")
-layout(matrix(c(1,2,3,
-                4,5,0), 2, 3, byrow = TRUE))
 scenario_bp("sense_of_control")
 scenario_bp("loss_self_consciousness")
 scenario_bp("time_transformation")
 scenario_bp("autotelic_experience")
 scenario_bp("engagement", y_range=c(0, 7))
 ```
-```{r}
-par(mar = c(2, 3, 0, 0.3), cex=1.5)
-scenario_bp("challenge_skill_balance")
-mtext("Score", side=2, line=2, cex=1.75)
-scenario_bp("action_awareness")
-scenario_bp("clear_goals")
-scenario_bp("unambiguous_feedback")
-scenario_bp("concentration")
-
-par(mar = c(2, 3, 0, 0.3), cex=1.5)
-scenario_bp("sense_of_control")
-mtext("Score", side=2, line=2, cex=1.75)
-scenario_bp("loss_self_consciousness")
-scenario_bp("time_transformation")
-scenario_bp("autotelic_experience")
-scenario_bp("engagement", y_range=c(0, 7))
-```
 
 ```{r}
-layout(matrix(c(1,2,3,
-                4,5,0), 2, 3, byrow = TRUE))
+par(mar = c(2, 3, 0, 0.3), cex=1.5)
 order_bp("challenge_skill_balance")
+mtext("Score", side=2, line=2, cex=1.75)
 order_bp("action_awareness")
 order_bp("clear_goals")
 order_bp("unambiguous_feedback")
 order_bp("concentration")
-layout(matrix(c(1,2,3,
-                4,5,0), 2, 3, byrow = TRUE))
+
+par(mar = c(2, 3, 0, 0.3), cex=1.5)
 order_bp("sense_of_control")
+mtext("Score", side=2, line=2, cex=1.75)
 order_bp("loss_self_consciousness")
 order_bp("time_transformation")
 order_bp("autotelic_experience")
@@ -320,6 +303,18 @@ hist(aesthetic_df$social, xlim=c(0, 100), ylim=c(0, 15), main="", xlab="", ylab=
 
 ```{r}
 par(mar = c(2, 3, 0, 0.3), cex=1.5)
-scenario_bp("challenge_skill_balance")
-mtext("Score", side=2, line=2, cex=1.75)
+
+scenario_bp("clear_goals")
+scenario_bp("unambiguous_feedback")
+scenario_bp("engagement", y_range = c(0,7))
+
+order_bp("challenge_skill_balance")
+order_bp("engagement", y_range=c(0,7))
+
+order_scenario_bp("clear_goals", scenario = "aesthetic")
+order_scenario_bp("unambiguous_feedback", scenario = "aesthetic")
+order_scenario_bp("engagement", scenario = "aesthetic", y_range=c(0,7))
+
+order_scenario_bp("challenge_skill_balance", scenario = "narrative")
+order_scenario_bp("engagement", scenario = "narrative", y_range=c(0,7))
 ```
