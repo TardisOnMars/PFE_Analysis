@@ -63,6 +63,16 @@ dfs_tpi <- filter(dfs_tpi, horodateur >= "2021-05-25")
 dfs_tpi$quel.est.votre.prenom.. <- stri_trans_general(tolower(dfs_tpi$quel.est.votre.prenom..), "Latin-ASCII")
 dfs_tpi$quel.est.votre.nom.de.famille.. <- stri_trans_general(tolower(dfs_tpi$quel.est.votre.nom.de.famille..), "Latin-ASCII")
 
+#### Experiments Time
+exp_times = read.csv(file="temps_xp.csv")
+exp_times[2:7] = lapply(exp_times[2:7], as.character)
+exp_times[2:7] = lapply(exp_times[2:7], as.ITime)
+exp_times["aesthetic_duration"] = exp_times$aesthetic_end - exp_times$aesthetic_begin
+exp_times["narrative_duration"] = exp_times$narrative_end - exp_times$narrative_begin
+exp_times["goals_duration"] = exp_times$goals_end - exp_times$goals_begin
+exp_durations = data.frame(Aesthetic_Duration=exp_times[8], Narrative_Duration=exp_times[9], Goals_Duration=exp_times[10])
+sum_durations = summary(exp_durations)
+
 #### Join
 traits_dfs_df <- inner_join(traits, dfs_tpi, by=c("quel.est.votre.nom.de.famille..", "quel.est.votre.prenom.."))
 
@@ -100,5 +110,3 @@ nevergame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.vide
 lowgame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Occasionnellement")
 midgame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Régulièrement")
 highgame_bf = filter(traits_dfs_df, a.quelle.frequence.jouez.vous.aux.jeux.videos.. == "Tous les jours")
-
-# Separate data depending on game experience AND scenario ??

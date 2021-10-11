@@ -127,3 +127,20 @@ game_bp = function(dimension = "", y_range=c(0,28)){
     mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=-3, outer=TRUE)
   }
 }
+
+dimension_corr = function(scenario, scenario_df){
+  print(paste("Correlation between dimensions in scenario : ", scenario))
+  
+  corr_matrix = rcorr(as.matrix(data.frame(challenge_skill_balance=scenario_df[["challenge_skill_balance"]],
+                             action_awareness=scenario_df[["action_awareness"]],
+                             clear_goals=scenario_df[["clear_goals"]],
+                             unambiguous_feedback=scenario_df[["unambiguous_feedback"]],
+                             concentration=scenario_df[["concentration"]],
+                             sense_of_control=scenario_df[["sense_of_control"]],
+                             loss_self_consciousness=scenario_df[["loss_self_consciousness"]],
+                             time_transformation=scenario_df[["time_transformation"]],
+                             autotelic_experience=scenario_df[["autotelic_experience"]],
+                             engagement=scenario_df[["engagement"]]
+                             )))
+  return(corr_matrix)
+}
