@@ -43,6 +43,104 @@ plspm_traits_dfs = function(traits_dfs_df){
   return(results)
 }
 
+plspm_traits_dfs_value = function(traits_dfs_df){
+  traits_blocks = list(15:19, 25:29, 20:24, 30:34, 10:14)
+  dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
+                    seq.int(from=43, length.out=4, by=9),
+                    seq.int(from=44, length.out=4, by=9),
+                    seq.int(from=45, length.out=4, by=9),
+                    seq.int(from=46, length.out=4, by=9),
+                    seq.int(from=47, length.out=4, by=9),
+                    seq.int(from=48, length.out=4, by=9),
+                    seq.int(from=49, length.out=4, by=9),
+                    seq.int(from=50, length.out=4, by=9))
+  presence_blocks = list(c(78:83))
+  traits_dfs_blocks = append(traits_blocks, dfs_blocks)
+  traits_dfs_blocks = as.list(append(traits_dfs_blocks, presence_blocks))
+  
+  traits_modes = rep("A", 5)
+  dfs_modes = rep("A", 9)
+  presence_modes = "A"
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  traits_dfs_modes = append(traits_dfs_modes, presence_modes)
+  
+  traits_dfs_path = read.csv("path_inner_model.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:5]
+  output_vars = colnames(traits_dfs_path)[6:15]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
+plspm_traits_dfs_value_adjusted = function(traits_dfs_df){
+  traits_blocks = list(c(15,16,18,19), 25:29, 20:24, 30:34, 10:14)
+  dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
+                    seq.int(from=43, length.out=4, by=9),
+                    seq.int(from=44, length.out=4, by=9),
+                    seq.int(from=45, length.out=4, by=9),
+                    seq.int(from=46, length.out=4, by=9),
+                    seq.int(from=47, length.out=4, by=9),
+                    seq.int(from=48, length.out=4, by=9),
+                    seq.int(from=49, length.out=4, by=9),
+                    seq.int(from=50, length.out=4, by=9))
+  presence_blocks = list(c(79:81, 83))
+  traits_dfs_blocks = append(traits_blocks, dfs_blocks)
+  traits_dfs_blocks = as.list(append(traits_dfs_blocks, presence_blocks))
+  
+  traits_modes = rep("A", 5)
+  dfs_modes = rep("A", 9)
+  presence_modes = "A"
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  traits_dfs_modes = append(traits_dfs_modes, presence_modes)
+  
+  traits_dfs_path = read.csv("path_inner_model.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:5]
+  output_vars = colnames(traits_dfs_path)[6:15]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
 plspm_traits_dfs_2 = function(traits_dfs_df){
   traits_blocks = 36:40
   dfs_blocks = list(86:94)
@@ -283,6 +381,10 @@ pls_analysis = function(first_df, second_df, third_df, first_title, second_title
     first_pls = plspm_traits_dfs_6(first_df)
     second_pls = plspm_traits_dfs_6(second_df)
     third_pls = plspm_traits_dfs_6(third_df)
+  }else if(type==7){
+    first_pls = plspm_traits_dfs_value(first_df)
+    second_pls = plspm_traits_dfs_value(second_df)
+    third_pls = plspm_traits_dfs_value(third_df)
   }
   
   par(mfcol = c(3,2))
@@ -300,4 +402,6 @@ pls_analysis = function(first_df, second_df, third_df, first_title, second_title
   print(third_pls$p_values)
   print(third_pls$path_coefs)
   mtext("Significative level = 0.10", line = -1, side=4, outer = TRUE)
+  tab = list(first_pls, second_pls, third_pls)
+  return(tab)
 }

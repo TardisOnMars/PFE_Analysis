@@ -2,6 +2,7 @@ library(readxl)
 library(dplyr)
 library(stringi)
 library(ggplot2)
+library(data.table)
 
 #### Personnality Traits
 
@@ -70,7 +71,8 @@ exp_times[2:7] = lapply(exp_times[2:7], as.ITime)
 exp_times["aesthetic_duration"] = exp_times$aesthetic_end - exp_times$aesthetic_begin
 exp_times["narrative_duration"] = exp_times$narrative_end - exp_times$narrative_begin
 exp_times["goals_duration"] = exp_times$goals_end - exp_times$goals_begin
-exp_durations = data.frame(Aesthetic_Duration=exp_times[8], Narrative_Duration=exp_times[9], Goals_Duration=exp_times[10])
+exp_times["total_duration"] = (exp_times$aesthetic_end - exp_times$aesthetic_begin) + (exp_times$narrative_end - exp_times$narrative_begin) + (exp_times$goals_end - exp_times$goals_begin)
+exp_durations = data.frame(Aesthetic_Duration=exp_times[8], Narrative_Duration=exp_times[9], Goals_Duration=exp_times[10], Total_Duration=exp_times[11]/60)
 sum_durations = summary(exp_durations)
 
 #### Join
