@@ -405,3 +405,63 @@ pls_analysis = function(first_df, second_df, third_df, first_title, second_title
   tab = list(first_pls, second_pls, third_pls)
   return(tab)
 }
+
+pls_analysis_check = function(plspm_analysis){
+  # Unidimsensionality
+  unidim_rows = rownames(plspm_analysis[["unidim"]])
+  c_alpha = plspm_analysis[["unidim"]][["C.alpha"]]
+  c_alpha_check = data.frame(block=unidim_rows[c_alpha<0.7], value=c_alpha[c_alpha<0.7])
+  
+  dg_rho = plspm_analysis[["unidim"]][["DG.rho"]]
+  dg_rho_check = data.frame(block=unidim_rows[dg_rho<0.7], value=dg_rho[dg_rho<0.7])
+  
+  eig_f = plspm_analysis[["unidim"]][["eig.1st"]]
+  eig_f_check = data.frame(block=unidim_rows[eig_f<1.0], value=eig_f[eig_f<1.0])
+  
+  eig_s = plspm_analysis[["unidim"]][["eig.2nd"]]
+  eig_s_check = data.frame(block=unidim_rows[eig_s>1.0], value=eig_s[eig_s>1.0])
+  
+  unidim_checks = list(c_alpha = c_alpha_check, dg_rho = dg_rho_check, eig_f = eig_f_check, eig_s = eig_s_check)
+  
+  # Checking loadings and communalities
+  outer_model_item = plspm_analysis[["outer_model"]][["name"]]
+  outer_model_block = plspm_analysis[["outer_model"]][["block"]]
+  
+  loadings = plspm_analysis[["outer_model"]][["loading"]]
+  loadings_check = data.frame(item=outer_model_item[loadings<0.7], block=outer_model_block[loadings<0.7], value=loadings[loadings<0.7])
+  
+  communalities = plspm_analysis[["outer_model"]][["communality"]]
+  communalities_check = data.frame(item=outer_model_item[loadings<0.7], block=outer_model_block[loadings<0.7], value=communalities[loadings<0.7])
+
+  outer_model_checks = list(loadings=loadings_check, communalities=communalities_check)
+    
+  # Coherence of crossloadings
+  crossloadings = plspm_analysis[["crossloadings"]]
+  crossloadings_check = NULL
+  for(i in 1:length(crossloadings[[1]])){
+    block = toString(crossloadings[i,2])
+    block_crossloading = crossloadings[i,block]
+    max_crossloading = max(crossloadings[i,3:17])
+    if(block_crossloading != max_crossloading){ 
+      if(is.null(crossloadings_check)){
+        crossloadings_check = data.frame(item=crossloadings[i,"name"], block=crossloadings[i,"block"], value=crossloadings[i,block])
+      }else{
+        crossloadings_check[nrow(crossloadings_check) + 1,] = list(crossloadings[i,"name"], crossloadings[i,"block"], crossloadings[i,block])
+      }
+    }
+  }
+
+  # Cohesion of inner summary
+  inner_summary_rows = rownames(plspm_analysis[["inner_summary"]])
+  
+  block_com = plspm_analysis[["inner_summary"]][["Block_Communality"]]
+  block_com_check = data.frame(block=inner_summary_rows[block_com<0.5], value=block_com[block_com<0.5])
+  
+  ave = plspm_analysis[["inner_summary"]][["AVE"]]
+  ave_check = data.frame(block=inner_summary_rows[ave<0.5], value=block_com[ave<0.5])
+  
+  inner_summary_checks=list(block_com=block_com_check, ave=ave_check)
+  
+  # Pseudo Goodness of fit
+  return(list(unidim=unidim_checks, outer_model=outer_model_checks, crossloadings=crossloadings_check, inner_summary=inner_summary_checks, gof=plspm_analysis[["gof"]]))
+}
