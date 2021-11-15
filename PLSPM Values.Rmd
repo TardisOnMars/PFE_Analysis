@@ -18,21 +18,26 @@ source("PLS_functions.R")
 ```
 
 ```{r}
-print("Analyse plspm")
 tab = pls_analysis(aesthetic_df, narrative_df, objectives_df,
-             "Aesthetic Scenario", "Narrative Scenario", "Objectives Scenario",
+             "Aesthetic Scenario", "Narrative Scenario", "Goals Scenario",
              type=7, color_lim = NULL)
 
-print("Valeurs pour le scenario Aesthetic")
-aesthetic_check = pls_analysis_values(tab[[1]][["traits_dfs_pls"]])
-knitr::kable(aesthetic_check, "simple")
+knit_plspm_results(tab[[1]][["traits_dfs_pls"]], "Aesthetic")
 
-print("Valeurs pour le scenario Narrative")
-narrative_check = pls_analysis_values(tab[[2]][["traits_dfs_pls"]])
-knitr::kable(narrative_check, "simple")
+knit_plspm_results(tab[[2]][["traits_dfs_pls"]], "Narrative")
 
-print("Valeurs pour le scenario Goals")
-goals_check     = pls_analysis_values(tab[[3]][["traits_dfs_pls"]])
-knitr::kable(goals_check, "simple")
+knit_plspm_results(tab[[3]][["traits_dfs_pls"]], "Goals")
 ```
 
+```{r}
+tab = pls_analysis(aesthetic_df, narrative_df, objectives_df,
+             "Aesthetic Scenario", "Narrative Scenario", "Goals Scenario",
+             type=8, color_lim = NULL)
+
+
+knit_plspm_results(tab[[1]][["traits_dfs_pls"]], "Aesthetic")
+
+knit_plspm_results(tab[[2]][["traits_dfs_pls"]], "Narrative")
+
+knit_plspm_results(tab[[3]][["traits_dfs_pls"]], "Goals")
+```
