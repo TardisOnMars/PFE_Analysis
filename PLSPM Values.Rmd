@@ -1,0 +1,38 @@
+---
+title: "PLSPM Values"
+geometry: margin=0.2cm
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=8, fig.height=10)
+
+```
+
+```{r}
+source("LoadData.R", encoding = "UTF-8")
+source("Stats_functions.R")
+source("PLS_functions.R")
+```
+
+```{r}
+print("Analyse plspm")
+tab = pls_analysis(aesthetic_df, narrative_df, objectives_df,
+             "Aesthetic Scenario", "Narrative Scenario", "Objectives Scenario",
+             type=7, color_lim = NULL)
+
+print("Valeurs pour le scenario Aesthetic")
+aesthetic_check = pls_analysis_values(tab[[1]][["traits_dfs_pls"]])
+knitr::kable(aesthetic_check, "simple")
+
+print("Valeurs pour le scenario Narrative")
+narrative_check = pls_analysis_values(tab[[2]][["traits_dfs_pls"]])
+knitr::kable(narrative_check, "simple")
+
+print("Valeurs pour le scenario Goals")
+goals_check     = pls_analysis_values(tab[[3]][["traits_dfs_pls"]])
+knitr::kable(goals_check, "simple")
+```
+

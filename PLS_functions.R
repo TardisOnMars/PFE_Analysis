@@ -392,18 +392,58 @@ pls_analysis = function(first_df, second_df, third_df, first_title, second_title
   plot_plspm_traits_dfs(second_pls$path_coefs, second_pls$p_values, title = second_title, color_lim = color_lim)
   plot_plspm_traits_dfs(third_pls$path_coefs, third_pls$p_values, title = third_title, color_lim = color_lim)
   mtext("Significative level = 0.05", line=-2, side=2, outer = TRUE)
+  
   plot_plspm_traits_dfs(first_pls$path_coefs, first_pls$p_values, significative_level = 0.1 ,title = first_title, color_lim = color_lim)
-  print(first_pls$p_values)
-  print(first_pls$path_coefs)
   plot_plspm_traits_dfs(second_pls$path_coefs, second_pls$p_values, significative_level = 0.1, title = second_title, color_lim = color_lim)
-  print(second_pls$p_values)
-  print(second_pls$path_coefs)
   plot_plspm_traits_dfs(third_pls$path_coefs, third_pls$p_values, significative_level = 0.1, title = third_title, color_lim = color_lim)
-  print(third_pls$p_values)
-  print(third_pls$path_coefs)
   mtext("Significative level = 0.10", line = -1, side=4, outer = TRUE)
   tab = list(first_pls, second_pls, third_pls)
   return(tab)
+}
+
+pls_analysis_values = function(plspm_analysis){
+  # Unidimsensionality
+  unidim_rows = rownames(plspm_analysis[["unidim"]])
+  c_alpha = plspm_analysis[["unidim"]][["C.alpha"]]
+  c_alpha_check = data.frame(block=unidim_rows, value=c_alpha)
+  
+  dg_rho = plspm_analysis[["unidim"]][["DG.rho"]]
+  dg_rho_check = data.frame(block=unidim_rows, value=dg_rho)
+  
+  eig_f = plspm_analysis[["unidim"]][["eig.1st"]]
+  eig_f_check = data.frame(block=unidim_rows, value=eig_f)
+  
+  eig_s = plspm_analysis[["unidim"]][["eig.2nd"]]
+  eig_s_check = data.frame(block=unidim_rows, value=eig_s)
+  
+  unidim_values = data.frame(block=unidim_rows, c_alpha=c_alpha, dg_rho=dg_rho, eig_f=eig_f, eig_s=eig_s)
+  
+  # Checking loadings and communalities
+  outer_model_item = plspm_analysis[["outer_model"]][["name"]]
+  outer_model_block = plspm_analysis[["outer_model"]][["block"]]
+  
+  loadings = plspm_analysis[["outer_model"]][["loading"]]
+  loadings_check = data.frame(item=outer_model_item, block=outer_model_block, loadings=loadings)
+  
+  communalities = plspm_analysis[["outer_model"]][["communality"]]
+  communalities_check = data.frame(item=outer_model_item, block=outer_model_block, communalities=communalities)
+  
+  # Coherence of crossloadings
+  crossloadings = plspm_analysis[["crossloadings"]]
+  
+  # Cohesion of inner summary
+  inner_summary_rows = rownames(plspm_analysis[["inner_summary"]])
+  
+  block_com = plspm_analysis[["inner_summary"]][["Block_Communality"]]
+  ave = plspm_analysis[["inner_summary"]][["AVE"]]
+  r2 = plspm_analysis[["inner_summary"]][["R2"]]
+  
+  innersummary_check = data.frame(block=inner_summary_rows, AVE=ave, Block_Communality=block_com, R2=r2)
+  
+  # Pseudo Goodness of fit
+  gof = data.table(Goodness_of_fit=plspm_analysis[["gof"]])
+  #crossloadings=crossloadings
+  return(list(unidim=unidim_values, loadings=loadings_check, communalities=communalities_check, inner_summary=innersummary_check, gof=gof))
 }
 
 pls_analysis_check = function(plspm_analysis){
