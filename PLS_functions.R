@@ -137,6 +137,118 @@ plspm_traits_dfs_value_adjusted = function(traits_dfs_df){
   return(results)
 }
 
+plspm_traits_dfs_value_adjusted_2 = function(traits_dfs_df){
+  traits_blocks = list(c(15,16,19), 25:29, 20:24, c(30, 32:34), 10:14)
+  dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
+                    seq.int(from=43, length.out=4, by=9),
+                    seq.int(from=44, length.out=4, by=9),
+                    seq.int(from=45, length.out=4, by=9),
+                    seq.int(from=46, length.out=4, by=9),
+                    seq.int(from=47, length.out=4, by=9),
+                    seq.int(from=48, length.out=4, by=9),
+                    seq.int(from=49, length.out=4, by=9),
+                    seq.int(from=50, length.out=4, by=9))
+  presence_blocks = list(c(79,81,83))
+  traits_dfs_blocks = append(traits_blocks, dfs_blocks)
+  traits_dfs_blocks = as.list(append(traits_dfs_blocks, presence_blocks))
+  
+  traits_modes = rep("A", 5)
+  dfs_modes = rep("A", 9)
+  presence_modes = "A"
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  traits_dfs_modes = append(traits_dfs_modes, presence_modes)
+  
+  traits_dfs_path = read.csv("path_inner_model.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:5]
+  output_vars = colnames(traits_dfs_path)[6:15]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
+plspm_traits_dfs_value_adjusted_3 = function(traits_dfs_df){
+  traits_blocks = list(c(15,16,19), 25:29, 20:24, c(30, 32:34), 10:14)
+  dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
+                    seq.int(from=43, length.out=4, by=9),
+                    seq.int(from=44, length.out=4, by=9),
+                    seq.int(from=45, length.out=4, by=9),
+                    seq.int(from=46, length.out=4, by=9),
+                    seq.int(from=47, length.out=4, by=9),
+                    seq.int(from=48, length.out=4, by=9),
+                    seq.int(from=49, length.out=4, by=9),
+                    seq.int(from=50, length.out=4, by=9))
+  traits_dfs_blocks = append(traits_blocks, dfs_blocks)
+  
+  traits_modes = rep("A", 5)
+  dfs_modes = rep("A", 9)
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  
+  traits_dfs_path = read.csv("path_inner_model_adjusted_2.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:5]
+  output_vars = colnames(traits_dfs_path)[6:14]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
+pls_traits = function(traits_dfs_df){
+  traits_blocks = list(15:19, 25:29, 20:24, 30:34, 10:14)
+  
+  traits_modes = rep("A", 5)
+  
+  Aest = c(1,0,0,0,0)
+  Chal = c(1,1,0,0,0)
+  Narr = c(1,1,1,0,0)
+  Goal = c(1,1,1,1,0)
+  Soci = c(1,1,1,1,1)
+  
+  traits_path = rbind(Aest, Chal, Narr, Goal, Soci)
+  
+  traits_pls = plspm(Data=traits_dfs_df, path_matrix=traits_path, blocks=traits_blocks, modes=traits_modes, scaled=FALSE)
+  
+  return(traits_pls)
+}
+
 plspm_traits_dfs_2 = function(traits_dfs_df){
   traits_blocks = 36:40
   dfs_blocks = list(86:94)
@@ -384,6 +496,14 @@ pls_analysis = function(first_df, second_df, third_df, first_title, second_title
     first_pls = plspm_traits_dfs_value_adjusted(first_df)
     second_pls = plspm_traits_dfs_value_adjusted(second_df)
     third_pls = plspm_traits_dfs_value_adjusted(third_df)
+  }else if(type==9){
+    first_pls = plspm_traits_dfs_value_adjusted_2(first_df)
+    second_pls = plspm_traits_dfs_value_adjusted_2(second_df)
+    third_pls = plspm_traits_dfs_value_adjusted_2(third_df)
+  }else if(type==10){
+    first_pls = plspm_traits_dfs_value_adjusted_3(first_df)
+    second_pls = plspm_traits_dfs_value_adjusted_3(second_df)
+    third_pls = plspm_traits_dfs_value_adjusted_3(third_df)
   }
   
   par(mfcol = c(3,2))
@@ -480,7 +600,7 @@ pls_analysis_check = function(plspm_analysis){
   loadings_check = mutate(loadings_check, across(everything(), str_sub, 1, 50))
   
   communalities = plspm_analysis[["outer_model"]][["communality"]]
-  communalities_check = data.frame(item=outer_model_item[communalities<0.7], block=outer_model_block[communalities<0.7], communalities=communalities[communalities<0.7])
+  communalities_check = data.frame(item=outer_model_item[communalities<0.49], block=outer_model_block[communalities<0.49], communalities=communalities[communalities<0.49])
   communalities_check = mutate(communalities_check, across(everything(), str_sub, 1, 50))
   
   outer_model_checks = list(loadings=loadings_check, communalities=communalities_check)
@@ -523,16 +643,20 @@ pls_analysis_check = function(plspm_analysis){
   return(list(unidim=unidim_checks, outer_model=outer_model_checks, crossloadings=crossloadings_check, inner_summary=inner_summary_checks, gof=gof))
 }
 
-knit_plspm_results = function(plspm_analysis, scenario = "Scenario"){
-  print(paste("Valeurs pour le scenario", scenario))
+knit_plspm_results = function(plspm_analysis, scenario = "Scenario", latex = FALSE){
+  print(paste("--------------- Valeurs pour le scenario", scenario))
   plspm_values = pls_analysis_values(plspm_analysis)
   print(knitr::kable(plspm_values, "simple"))
-  values_latex = knitr::kable(plspm_values, "latex")
   
+  print(paste("--------------- Valeurs a verifier pour le scenario", scenario))
   plspm_values_check = pls_analysis_check(plspm_analysis)
-  print(paste("Valeurs a verifier pour le scenario", scenario))
   print(knitr::kable(plspm_values_check, "simple"))
-  values_check_latex = knitr::kable(plspm_values_check, "latex")
   
-  return(c(values_latex, values_check_latex))
+  latex_list = list()
+  if(latex){
+    latex_list.append(knitr::kable(plspm_values, "latex"))
+    latex_list.append(knitr::kable(plspm_values_check, "latex"))
+  }
+  
+  return(latex_list)
 }

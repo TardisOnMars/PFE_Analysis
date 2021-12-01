@@ -257,14 +257,18 @@ pls_analysis(aesthetic_df, narrative_df, objectives_df,
              "Aesthetic Scenario", "Narrative Scenario", "Objectives Scenario",
              color_lim = NULL)
 ```
-
 ```{r}
 tab = pls_analysis(aesthetic_df, narrative_df, objectives_df,
              "Aesthetic Scenario", "Narrative Scenario", "Objectives Scenario",
              type=7, color_lim = NULL)
-aesthetic_check = pls_analysis_check(tab[[1]][["traits_dfs_pls"]])
-narrative_check = pls_analysis_check(tab[[2]][["traits_dfs_pls"]])
-goals_check     = pls_analysis_check(tab[[3]][["traits_dfs_pls"]])
+
+# tab[[1]][["traits_dfs_pls"]][["unidim"]][["C.alpha"]]
+# 
+# tab[[1]][["traits_dfs_pls"]][["unidim"]][["DG.rho"]]
+# 
+# tab[[1]][["traits_dfs_pls"]][["inner_summary"]][["AVE"]]
+# 
+# tab[[1]][["traits_dfs_pls"]][["outer_model"]][["loading"]]
 ```
 
 ```{r}

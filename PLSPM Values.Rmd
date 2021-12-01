@@ -1,5 +1,5 @@
 ---
-title: "PLSPM Values"
+title: "PLSPM-Values"
 geometry: margin=0.2cm
 output:
   pdf_document: default
@@ -11,13 +11,30 @@ knitr::opts_chunk$set(fig.width=8, fig.height=10)
 
 ```
 
-```{r}
+```{r, results='hide', warning=FALSE, echo=FALSE, message=FALSE}
 source("LoadData.R", encoding = "UTF-8")
 source("Stats_functions.R")
 source("PLS_functions.R")
 ```
+# Analyse PLSPM - Influence des traits de personnalité sur le flow et l'engagement
 
-```{r}
+## ----------- TESTS AVEC INNER MODEL "PARFAIT" (vérif outer model only) -----------
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+aest_pls = pls_traits(aesthetic_df)
+narr_pls = pls_traits(narrative_df)
+goal_pls = pls_traits(objectives_df)
+
+knit_plspm_results(aest_pls, "Aesthetic")
+
+knit_plspm_results(narr_pls, "Narrative")
+
+knit_plspm_results(goal_pls, "Goals")
+```
+
+
+## ----------- Modele initial / Tous les constructs / Tous les items -----------
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
 tab = pls_analysis(aesthetic_df, narrative_df, objectives_df,
              "Aesthetic Scenario", "Narrative Scenario", "Goals Scenario",
              type=7, color_lim = NULL)
@@ -28,11 +45,37 @@ knit_plspm_results(tab[[2]][["traits_dfs_pls"]], "Narrative")
 
 knit_plspm_results(tab[[3]][["traits_dfs_pls"]], "Goals")
 ```
-
-```{r}
+## ----------- Modele Ajuste / Constructs deleted : Aesthetic & Engagement / Tous les items -----------
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
 tab = pls_analysis(aesthetic_df, narrative_df, objectives_df,
              "Aesthetic Scenario", "Narrative Scenario", "Goals Scenario",
              type=8, color_lim = NULL)
+
+
+knit_plspm_results(tab[[1]][["traits_dfs_pls"]], "Aesthetic")
+
+knit_plspm_results(tab[[2]][["traits_dfs_pls"]], "Narrative")
+
+knit_plspm_results(tab[[3]][["traits_dfs_pls"]], "Goals")
+```
+## ----------- Modele Ajuste / Tous les constructs / Items retirés sur Aesthetic, Social & Engagement -----------
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+tab = pls_analysis(aesthetic_df, narrative_df, objectives_df,
+             "Aesthetic Scenario", "Narrative Scenario", "Goals Scenario",
+             type=9, color_lim = NULL)
+
+
+knit_plspm_results(tab[[1]][["traits_dfs_pls"]], "Aesthetic")
+
+knit_plspm_results(tab[[2]][["traits_dfs_pls"]], "Narrative")
+
+knit_plspm_results(tab[[3]][["traits_dfs_pls"]], "Goals")
+```
+## ----------- Modele Ajuste / Construct deleted : Engagement / Items retirés sur Aesthetic & Social -----------
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+tab = pls_analysis(aesthetic_df, narrative_df, objectives_df,
+             "Aesthetic Scenario", "Narrative Scenario", "Goals Scenario",
+             type=10, color_lim = NULL)
 
 
 knit_plspm_results(tab[[1]][["traits_dfs_pls"]], "Aesthetic")
