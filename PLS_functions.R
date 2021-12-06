@@ -2,6 +2,8 @@ library(plspm)
 library(corrplot)
 library(RColorBrewer)
 
+model_path = "./model/"
+
 plspm_traits_dfs = function(traits_dfs_df){
   traits_blocks = 36:40
   dfs_blocks = 86:94
@@ -15,7 +17,7 @@ plspm_traits_dfs = function(traits_dfs_df){
   traits_dfs_modes = append(traits_modes, dfs_modes)
   traits_dfs_modes = append(traits_dfs_modes, presence_modes)
   
-  traits_dfs_path = read.csv("path_inner_model.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
@@ -64,7 +66,7 @@ plspm_traits_dfs_value = function(traits_dfs_df){
   traits_dfs_modes = append(traits_modes, dfs_modes)
   traits_dfs_modes = append(traits_dfs_modes, presence_modes)
   
-  traits_dfs_path = read.csv("path_inner_model.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
@@ -109,7 +111,7 @@ plspm_traits_dfs_value_adjusted = function(traits_dfs_df){
   dfs_modes = rep("A", 9)
   traits_dfs_modes = append(traits_modes, dfs_modes)
   
-  traits_dfs_path = read.csv("path_inner_model_adjusted.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
@@ -158,7 +160,7 @@ plspm_traits_dfs_value_adjusted_2 = function(traits_dfs_df){
   traits_dfs_modes = append(traits_modes, dfs_modes)
   traits_dfs_modes = append(traits_dfs_modes, presence_modes)
   
-  traits_dfs_path = read.csv("path_inner_model.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
@@ -203,7 +205,7 @@ plspm_traits_dfs_value_adjusted_3 = function(traits_dfs_df){
   dfs_modes = rep("A", 9)
   traits_dfs_modes = append(traits_modes, dfs_modes)
   
-  traits_dfs_path = read.csv("path_inner_model_adjusted_2.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_2.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
@@ -262,7 +264,7 @@ plspm_traits_dfs_2 = function(traits_dfs_df){
   traits_dfs_modes = append(traits_modes, dfs_modes)
   traits_dfs_modes = append(traits_dfs_modes, presence_modes)
   
-  traits_dfs_path = read.csv("path_inner_model_2.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_2.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
@@ -304,7 +306,7 @@ plspm_traits_dfs_3 = function(traits_dfs_df){
   traits_dfs_modes = append(traits_modes, dfs_modes)
   traits_dfs_modes = append(traits_dfs_modes, presence_modes)
   
-  traits_dfs_path = read.csv("path_inner_model_3.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_3.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
@@ -346,7 +348,7 @@ plspm_traits_dfs_4 = function(traits_dfs_df){
   traits_dfs_modes = append(traits_modes, dfs_modes)
   traits_dfs_modes = append(traits_dfs_modes, presence_modes)
   
-  traits_dfs_path = read.csv("path_inner_model_2.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_2.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
@@ -387,7 +389,7 @@ plspm_traits_dfs_5 = function(traits_dfs_df){
   traits_dfs_modes = append(traits_modes, dfs_modes)
   traits_dfs_modes = append(traits_dfs_modes, presence_modes)
   
-  traits_dfs_path = read.csv("path_inner_model_4.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_4.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
@@ -428,7 +430,7 @@ plspm_traits_dfs_6 = function(traits_dfs_df){
   traits_dfs_modes = append(traits_modes, dfs_modes)
   traits_dfs_modes = append(traits_dfs_modes, presence_modes)
   
-  traits_dfs_path = read.csv("path_inner_model_2.csv", header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_2.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)

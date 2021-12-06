@@ -1,0 +1,282 @@
+---
+title: "SEM_ANALYSIS"
+geometry: margin=0.2cm
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+# SEM Analysis : Influence of player Traits on Flow in Virtual Reality
+## SEM for Traits using Lavaan
+
+```{r, results='hide', warning=FALSE, echo=FALSE, message=FALSE}
+library(lavaan)
+source("LoadData.R", encoding = "UTF-8")
+source("Stats_functions.R")
+source("PLS_functions.R")
+source("SEM_functions.R")
+```
+
+
+```{r}
+traits_data = sem_traits_data(aesthetic_df)
+```
+### Traits Model
+```{r}
+traits_model <- '
+# measurement model
+Aesthetic =~ AEST1 + AEST2 + AEST3 + AEST4 + AEST5
+Challenge =~ CHAL1 + CHAL2 + CHAL3 + CHAL4 + CHAL5
+Goals =~ GOAL1 + GOAL2 + GOAL3 + GOAL4 + GOAL5
+Narrative =~ NARR1 + NARR2 + NARR3 + NARR4 + NARR5
+Social =~ SOCI1 + SOCI2 + SOCI3 + SOCI4 + SOCI5
+'
+
+fit_traits_model <- sem(traits_model, data=traits_data)
+
+summary(fit_traits_model, standardized=TRUE, fit.measures=TRUE)
+```
+### Adjusted Traits Models
+#### Adjusted on Aesthetic 
+Adjustment : Remove AEST4
+```{r}
+traits_model <- '
+# measurement model
+Aesthetic =~ AEST1 + AEST2 + AEST3 + AEST5
+Challenge =~ CHAL1 + CHAL2 + CHAL3 + CHAL4 + CHAL5
+Goals =~ GOAL1 + GOAL2 + GOAL3 + GOAL4 + GOAL5
+Narrative =~ NARR1 + NARR2 + NARR3 + NARR4 + NARR5
+Social =~ SOCI1 + SOCI2 + SOCI3 + SOCI4 + SOCI5
+'
+
+fit_traits_model <- sem(traits_model, data=traits_data)
+
+summary(fit_traits_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+#### Adjusted on All Traits 
+Adjustment : Remove AEST4, CHAL2, GOAL2, NARR5, SOCI5
+```{r}
+traits_model <- '
+# measurement model
+Aesthetic =~ AEST1 + AEST2 + AEST3 + AEST5
+Challenge =~ CHAL1 + CHAL3 + CHAL4 + CHAL5
+Goals =~ GOAL1 + GOAL3 + GOAL4 + GOAL5
+Narrative =~ NARR1 + NARR2 + NARR3 + NARR4
+Social =~ SOCI1 + SOCI2 + SOCI3 + SOCI4
+'
+
+fit_traits_model <- sem(traits_model, data=traits_data)
+
+summary(fit_traits_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+## SEM for Flow using Lavaan
+
+```{r}
+all_flow_data  = sem_flow_data(traits_dfs_df)
+aest_flow_data = sem_flow_data(aesthetic_df)
+goal_flow_data = sem_flow_data(objectives_df)
+narr_flow_data = sem_flow_data(narrative_df)
+```
+
+```{r}
+flow_model <- '
+# measurement model
+Chal.Skill.Balance =~ CSB1 + CSB2 + CSB3 + CSB4
+Action.Awareness =~ AA1 + AA2 + AA3 + AA4
+Clear.Goals =~ CG1 + CG2 + CG3 + CG4
+Unambiguous.Fdbck =~ UF1 + UF2 + UF3 + UF4
+Concentration =~ CNT1 + CNT2 + CNT3 + CNT4
+Sense.of.Control =~ SOC1 + SOC2 + SOC3 + SOC4
+Loss.Self.Cnscsnss =~ LSC1 + LSC2 + LSC3 + LSC4
+Time.Trnsfrmtn =~ TT1 + TT2 + TT3 + TT4
+Autotelic.Exprnc =~ AE1 + AE2 + AE3 + AE4
+'
+```
+### Flow Model for All Scenario
+```{r}
+all_fit_flow_model <- sem(flow_model, data=all_flow_data)
+
+summary(all_fit_flow_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+## SEM for Engagement using Lavaan
+
+```{r}
+all_engagement_data  = sem_engagement_data(traits_dfs_df)
+aest_engagement_data = sem_engagement_data(aesthetic_df)
+goal_engagement_data = sem_engagement_data(objectives_df)
+narr_engagement_data = sem_engagement_data(narrative_df)
+```
+
+```{r}
+engagement_model <- '
+# measurement model
+Engagement =~ ENG1 + ENG2 + ENG3 + ENG4 + ENG5 + ENG6
+'
+```
+### Default Engagement Models
+#### All Scenario
+
+```{r}
+all_fit_engagement_model <- sem(engagement_model, data=all_engagement_data)
+
+summary(all_fit_engagement_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+#### Aesthetic Scenario
+
+```{r}
+aest_fit_engagement_model <- sem(engagement_model, data=aest_engagement_data)
+
+summary(aest_fit_engagement_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+#### Narrative Scenario
+
+```{r}
+narr_fit_engagement_model <- sem(engagement_model, data=narr_engagement_data)
+
+summary(narr_fit_engagement_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+#### Goals Scenario
+
+```{r}
+goal_fit_engagement_model <- sem(engagement_model, data=goal_engagement_data)
+
+summary(goal_fit_engagement_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+### Adjusted Engagement Models
+#### All Scenario 
+Adjustment : Remove ENG5 and ENG6
+
+```{r}
+engagement_model <- '
+# measurement model
+Engagement =~ ENG1 + ENG2 + ENG3 + ENG4
+'
+```
+
+```{r}
+all_fit_engagement_model <- sem(engagement_model, data=all_engagement_data)
+
+summary(all_fit_engagement_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+#### Aesthetic Scenario
+
+```{r}
+aest_fit_engagement_model <- sem(engagement_model, data=aest_engagement_data)
+
+summary(aest_fit_engagement_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+#### Narrative Scenario
+
+```{r}
+narr_fit_engagement_model <- sem(engagement_model, data=narr_engagement_data)
+
+summary(narr_fit_engagement_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+#### Goals Scenario
+
+```{r}
+goal_fit_engagement_model <- sem(engagement_model, data=goal_engagement_data)
+
+summary(goal_fit_engagement_model, standardized=TRUE, fit.measures=TRUE)
+```
+
+
+<!-- ### Flow Model for Aesthetic Scenario -->
+<!-- ```{r} -->
+<!-- aest_fit_flow_model <- sem(flow_model, data=aest_flow_data) -->
+
+<!-- summary(aest_fit_flow_model, standardized=TRUE, fit.measures=TRUE) -->
+<!-- ``` -->
+
+<!-- ### Flow Model for Goals Scenario -->
+<!-- ```{r} -->
+<!-- goal_fit_flow_model <- sem(flow_model, data=goal_flow_data) -->
+
+<!-- summary(goal_fit_flow_model, standardized=TRUE, fit.measures=TRUE) -->
+<!-- ``` -->
+
+<!-- ### Flow Model for Narrative Scenario -->
+<!-- ```{r} -->
+<!-- narr_fit_flow_model <- sem(flow_model, data=narr_flow_data) -->
+
+<!-- summary(narr_fit_flow_model, standardized=TRUE, fit.measures=TRUE) -->
+<!-- ``` -->
+
+<!-- ## PLS-SEM Model -->
+<!-- ```{r} -->
+<!-- traits_flow_model <- ' -->
+<!-- # Traits Measurement Model -->
+<!-- Aesthetic =~ AEST1 + AEST2 + AEST3 + AEST5 -->
+<!-- Challenge =~ CHAL1 + CHAL3 + CHAL4 + CHAL5 -->
+<!-- Goals =~ GOAL1 + GOAL3 + GOAL4 + GOAL5 -->
+<!-- Narrative =~ NARR1 + NARR2 + NARR3 + NARR4 -->
+<!-- Social =~ SOCI1 + SOCI2 + SOCI3 + SOCI4 -->
+
+<!-- # Flow Measurement Model -->
+<!-- Chal.Skill.Balance =~ CSB1 + CSB2 + CSB3 + CSB4 -->
+<!-- Action.Awareness =~ AA1 + AA2 + AA3 + AA4 -->
+<!-- Clear.Goals =~ CG1 + CG2 + CG3 + CG4 -->
+<!-- Unambiguous.Feedback =~ UF1 + UF2 + UF3 + UF4 -->
+<!-- Concentration =~ CNT1 + CNT2 + CNT3 + CNT4 -->
+<!-- Sense.of.Control =~ SOC1 + SOC2 + SOC3 + SOC4 -->
+<!-- Loss.Self.Consciousness =~ LSC1 + LSC2 + LSC3 + LSC4 -->
+<!-- Time.Transformation =~ TT1 + TT2 + TT3 + TT4 -->
+<!-- Autotelic.Experience =~ AE1 + AE2 + AE3 + AE4 -->
+
+<!-- # Regression -->
+<!-- Chal.Skill.Balance ~ Aesthetic + Challenge + Goals + Narrative + Social -->
+<!-- Action.Awareness ~ Aesthetic + Challenge + Goals + Narrative + Social -->
+<!-- Clear.Goals ~ Aesthetic + Challenge + Goals + Narrative + Social -->
+<!-- Unambiguous.Feedback ~ Aesthetic + Challenge + Goals + Narrative + Social -->
+<!-- Concentration ~ Aesthetic + Challenge + Goals + Narrative + Social -->
+<!-- Sense.of.Control ~ Aesthetic + Challenge + Goals + Narrative + Social -->
+<!-- Loss.Self.Consciousness ~ Aesthetic + Challenge + Goals + Narrative + Social -->
+<!-- Time.Transformation ~ Aesthetic + Challenge + Goals + Narrative + Social -->
+<!-- Autotelic.Experience ~ Aesthetic + Challenge + Goals + Narrative + Social -->
+<!-- ' -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- all_traits_flow_data = rbind(cbind(traits_data, aest_flow_data), cbind(traits_data, goal_flow_data), cbind(traits_data, narr_flow_data)) -->
+
+<!-- all_fit_traits_flow_model <- sem(traits_flow_model, data=all_traits_flow_data) -->
+
+<!-- summary(all_fit_traits_flow_model, standardized=TRUE, fit.measures=TRUE) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- aest_traits_flow_data = cbind(traits_data, aest_flow_data) -->
+
+<!-- aest_fit_traits_flow_model <- sem(traits_flow_model, data=aest_traits_flow_data) -->
+
+<!-- summary(aest_fit_traits_flow_model, standardized=TRUE, fit.measures=TRUE) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- goal_traits_flow_data = cbind(traits_data, goal_flow_data) -->
+
+<!-- goal_fit_traits_flow_model <- sem(traits_flow_model, data=goal_traits_flow_data) -->
+
+<!-- summary(goal_fit_traits_flow_model, standardized=TRUE, fit.measures=TRUE) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- narr_traits_flow_data = cbind(traits_data, narr_flow_data) -->
+
+<!-- narr_fit_traits_flow_model <- sem(traits_flow_model, data=narr_traits_flow_data) -->
+
+<!-- summary(narr_fit_traits_flow_model, standardized=TRUE, fit.measures=TRUE) -->
+<!-- ``` -->

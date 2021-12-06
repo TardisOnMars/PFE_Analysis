@@ -4,10 +4,12 @@ library(stringi)
 library(ggplot2)
 library(data.table)
 
+data_path = "./data/"
+
 #### Personnality Traits
 
 # Create dataframe from excel sheets
-traits <- read_excel("Les Cinq Facteurs des Traits De Joueurs (réponses).xlsx")
+traits <- read_excel(paste(data_path, "Les Cinq Facteurs des Traits De Joueurs (réponses).xlsx", sep=''))
 
 # Reverse answers for questions marked with "[R]" (likert 7)
 for(i in 1:length(traits)){
@@ -41,7 +43,7 @@ traits$quel.est.votre.nom.de.famille.. <- stri_trans_general(tolower(traits$quel
 #### Flow and Presence Questionnaires
 
 # Create dataframe from excel sheets
-dfs_tpi <- read_excel("Dispositional Flow Scale + TPI (réponses).xlsx")
+dfs_tpi <- read_excel(paste(data_path, "Dispositional Flow Scale + TPI (réponses).xlsx", sep=''))
 dfs_tpi <- rename_all(dfs_tpi, make.names)
 colnames(dfs_tpi) = stri_trans_general(tolower(colnames(dfs_tpi)), "Latin-ASCII")
 
@@ -65,7 +67,7 @@ dfs_tpi$quel.est.votre.prenom.. <- stri_trans_general(tolower(dfs_tpi$quel.est.v
 dfs_tpi$quel.est.votre.nom.de.famille.. <- stri_trans_general(tolower(dfs_tpi$quel.est.votre.nom.de.famille..), "Latin-ASCII")
 
 #### Experiments Time
-exp_times = read.csv(file="temps_xp.csv")
+exp_times = read.csv(file=paste(data_path, "temps_xp.csv", sep=''))
 exp_times[2:7] = lapply(exp_times[2:7], as.character)
 exp_times[2:7] = lapply(exp_times[2:7], as.ITime)
 exp_times["aesthetic_duration"] = exp_times$aesthetic_end - exp_times$aesthetic_begin
