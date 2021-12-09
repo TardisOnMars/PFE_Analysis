@@ -1,4 +1,5 @@
 library(stringr)
+library(ggpubr)
 source("LoadData.R",encoding="utf-8")
 
 scenario_bp = function(dimension = "", y_range=c(0,28)){
@@ -20,6 +21,26 @@ scenario_bp = function(dimension = "", y_range=c(0,28)){
 
 }
 
+scenario_ggbp = function(dimension=""){
+  scenario_df = cbind(traits_dfs_df[[dimension]], traits_dfs_df[["qu.avez.vous.vu.lors.de.l.experience.."]])
+  colnames(scenario_df) = c("Score", "Scenario")
+  scenario_df = as.data.frame(scenario_df)
+  scenario_df = mutate(scenario_df, Score=as.integer(Score))
+  scenario_df = mutate(scenario_df, Scenario=str_replace(Scenario, "Des portails", "Aesthetic"))
+  scenario_df = mutate(scenario_df, Scenario=str_replace(Scenario, "Des zombies", "Goals"))
+  scenario_df = mutate(scenario_df, Scenario=str_replace(Scenario, "Les recherches d'Isidore", "Narrative"))
+  
+  scenario_comparison <- list(c("Aesthetic", "Narrative"), c("Aesthetic", "Goals"), c("Narrative", "Goals"))
+  
+  ggboxplot(scenario_df, x = "Scenario", y = "Score",
+            color = "Scenario", palette = "jco", ylim = c(0, 28))+ 
+    stat_compare_means(comparisons = scenario_comparison,
+                       label.y = c(0, 1, 2), tip.length = c(-0.02, -0.02, -0.02),
+                       symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns")))
+  
+  #return(compare_means(Score ~ Scenario,  data = scenario_df))
+}
+
 order_bp = function(dimension = "", y_range=c(0,28)){
   bp = NULL
   sumaov <- summary.aov(aov(traits_dfs_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=traits_dfs_df))
@@ -35,7 +56,27 @@ order_bp = function(dimension = "", y_range=c(0,28)){
     #mtext(paste(str_to_title(dimension), "\n All Scenario"), line=1)
     #mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
   }
+  return(TukeyHSD(aov(traits_dfs_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=traits_dfs_df)))
+}
 
+order_ggbp = function(dimension=""){
+  order_df = cbind(traits_dfs_df[[dimension]], traits_dfs_df[["est.ce.votre.premiere..deuxieme.ou.troisieme.experience.."]])
+  colnames(order_df) = c("Score", "Order")
+  order_df = as.data.frame(order_df)
+  order_df = mutate(order_df, Score=as.integer(Score))
+  order_df = mutate(order_df, Order=str_replace(Order, "Première", "First"))
+  order_df = mutate(order_df, Order=str_replace(Order, "Deuxième", "Second"))
+  order_df = mutate(order_df, Order=str_replace(Order, "Troisième", "Third"))
+  
+  order_comparison <- list(c("First", "Second"), c("First", "Third"), c("Second", "Third"))
+  
+  ggboxplot(order_df, x = "Order", y = "Score",
+            color = "Order", palette = "jco", ylim = c(0, 28))+ 
+    stat_compare_means(comparisons = order_comparison,
+                       label.y = c(0, 1, 2), tip.length = c(-0.02, -0.02, -0.02),
+                       symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns")))
+  
+  #return(compare_means(Score ~ Scenario,  data = scenario_df))
 }
 
 scenario_order_bp = function(dimension = "", y_range=c(0,28), order=1){

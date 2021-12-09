@@ -4,6 +4,7 @@ library(RColorBrewer)
 
 model_path = "./model/"
 
+#PLSPM precalculted mean
 plspm_traits_dfs = function(traits_dfs_df){
   traits_blocks = 36:40
   dfs_blocks = 86:94
@@ -46,6 +47,19 @@ plspm_traits_dfs = function(traits_dfs_df){
 }
 
 plspm_traits_dfs_value = function(traits_dfs_df){
+  ### CODE TO COMPUTE MEAN AT RUNTIME, EASIER TO MODIFY
+  # traits_values_df = data.frame(traits_dfs_df[15:19], traits_dfs_df[25:29], traits_dfs_df[20:24], traits_dfs_df[30:34], traits_dfs_df[10:14])
+  # 
+  # flow_values_df = data.frame(traits_dfs_df[seq.int(from=42, length.out=4, by=9)],
+  #                             traits_dfs_df[seq.int(from=43, length.out=4, by=9)],
+  #                             traits_dfs_df[seq.int(from=44, length.out=4, by=9)],
+  #                             traits_dfs_df[seq.int(from=45, length.out=4, by=9)],
+  #                             traits_dfs_df[seq.int(from=46, length.out=4, by=9)],
+  #                             traits_dfs_df[seq.int(from=47, length.out=4, by=9)],
+  #                             traits_dfs_df[seq.int(from=48, length.out=4, by=9)],
+  #                             traits_dfs_df[seq.int(from=49, length.out=4, by=9)],
+  #                             traits_dfs_df[seq.int(from=50, length.out=4, by=9)])
+  ###
   traits_blocks = list(15:19, 25:29, 20:24, 30:34, 10:14)
   dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
                     seq.int(from=43, length.out=4, by=9),
@@ -140,7 +154,8 @@ plspm_traits_dfs_value_adjusted = function(traits_dfs_df){
 }
 
 plspm_traits_dfs_value_adjusted_2 = function(traits_dfs_df){
-  traits_blocks = list(c(15,16,19), 25:29, 20:24, c(30, 32:34), 10:14)
+  
+  traits_blocks = list(c(15,16,19), 25:29, 20:24, 30:33, 10:14)
   dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
                     seq.int(from=43, length.out=4, by=9),
                     seq.int(from=44, length.out=4, by=9),
@@ -150,17 +165,14 @@ plspm_traits_dfs_value_adjusted_2 = function(traits_dfs_df){
                     seq.int(from=48, length.out=4, by=9),
                     seq.int(from=49, length.out=4, by=9),
                     seq.int(from=50, length.out=4, by=9))
-  presence_blocks = list(c(79,81,83))
-  traits_dfs_blocks = append(traits_blocks, dfs_blocks)
-  traits_dfs_blocks = as.list(append(traits_dfs_blocks, presence_blocks))
+
+  traits_dfs_blocks = as.list(append(traits_blocks, dfs_blocks))
   
   traits_modes = rep("A", 5)
   dfs_modes = rep("A", 9)
-  presence_modes = "A"
   traits_dfs_modes = append(traits_modes, dfs_modes)
-  traits_dfs_modes = append(traits_dfs_modes, presence_modes)
   
-  traits_dfs_path = read.csv(paste(model_path, "path_inner_model.csv", sep=''), header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_eng.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
@@ -168,7 +180,7 @@ plspm_traits_dfs_value_adjusted_2 = function(traits_dfs_df){
   traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
   
   input_vars = colnames(traits_dfs_path)[1:5]
-  output_vars = colnames(traits_dfs_path)[6:15]
+  output_vars = colnames(traits_dfs_path)[6:14]
   
   path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
   
@@ -189,7 +201,7 @@ plspm_traits_dfs_value_adjusted_2 = function(traits_dfs_df){
 }
 
 plspm_traits_dfs_value_adjusted_3 = function(traits_dfs_df){
-  traits_blocks = list(c(15,16,19), 25:29, 20:24, c(30, 32:34), 10:14)
+  traits_blocks = list(c(25,27,28,29), c(20,22,23,24), 30:33, 10:13)
   dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
                     seq.int(from=43, length.out=4, by=9),
                     seq.int(from=44, length.out=4, by=9),
@@ -201,19 +213,19 @@ plspm_traits_dfs_value_adjusted_3 = function(traits_dfs_df){
                     seq.int(from=50, length.out=4, by=9))
   traits_dfs_blocks = append(traits_blocks, dfs_blocks)
   
-  traits_modes = rep("A", 5)
+  traits_modes = rep("A", 4)
   dfs_modes = rep("A", 9)
   traits_dfs_modes = append(traits_modes, dfs_modes)
   
-  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_2.csv", sep=''), header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_aest_eng.csv", sep=''), header=TRUE, sep=";", row.names = 1)
   traits_dfs_path = as.matrix(traits_dfs_path)
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
   
   traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
   
-  input_vars = colnames(traits_dfs_path)[1:5]
-  output_vars = colnames(traits_dfs_path)[6:14]
+  input_vars = colnames(traits_dfs_path)[1:4]
+  output_vars = colnames(traits_dfs_path)[5:13]
   
   path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
   
@@ -249,6 +261,70 @@ pls_traits = function(traits_dfs_df){
   traits_pls = plspm(Data=traits_dfs_df, path_matrix=traits_path, blocks=traits_blocks, modes=traits_modes, scaled=FALSE)
   
   return(traits_pls)
+}
+
+pls_dfs = function(traits_dfs_df){
+  dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
+                    seq.int(from=43, length.out=4, by=9),
+                    seq.int(from=44, length.out=4, by=9),
+                    seq.int(from=45, length.out=4, by=9),
+                    seq.int(from=46, length.out=4, by=9),
+                    seq.int(from=47, length.out=4, by=9),
+                    seq.int(from=48, length.out=4, by=9),
+                    seq.int(from=49, length.out=4, by=9),
+                    seq.int(from=50, length.out=4, by=9))
+  
+  dfs_modes = rep("A", 9)
+  
+  csb = c(1,0,0,0,0,0,0,0,0)
+  aa = c(1,1,0,0,0,0,0,0,0)
+  cg = c(1,1,1,0,0,0,0,0,0)
+  uf = c(1,1,1,1,0,0,0,0,0)
+  cnt = c(1,1,1,1,1,0,0,0,0)
+  soc = c(1,1,1,1,1,1,0,0,0)
+  lsc = c(1,1,1,1,1,1,1,0,0)
+  tt = c(1,1,1,1,1,1,1,1,0)
+  ae = c(1,1,1,1,1,1,1,1,1)
+  
+  dfs_path = rbind(csb, aa, cg, uf, cnt, soc, lsc, tt, ae)
+  
+  dfs_pls = plspm(Data=traits_dfs_df, path_matrix=dfs_path, blocks=dfs_blocks, modes=dfs_modes, scaled=FALSE)
+  
+  return(dfs_pls)
+}
+
+pls_dfs_eng = function(traits_dfs_df){
+  dfs_eng_blocks = list(seq.int(from=42, length.out=4, by=9),
+                    seq.int(from=43, length.out=4, by=9),
+                    seq.int(from=44, length.out=4, by=9),
+                    seq.int(from=45, length.out=4, by=9),
+                    seq.int(from=46, length.out=4, by=9),
+                    seq.int(from=47, length.out=4, by=9),
+                    seq.int(from=48, length.out=4, by=9),
+                    seq.int(from=49, length.out=4, by=9),
+                    seq.int(from=50, length.out=4, by=9),
+                    c(78:81),
+                    c(82,83))
+  
+  dfs_eng_modes = rep("A", 11)
+  
+  csb   = c(1,0,0,0,0,0,0,0,0,0,0)
+  aa    = c(1,1,0,0,0,0,0,0,0,0,0)
+  cg    = c(1,1,1,0,0,0,0,0,0,0,0)
+  uf    = c(1,1,1,1,0,0,0,0,0,0,0)
+  cnt   = c(1,1,1,1,1,0,0,0,0,0,0)
+  soc   = c(1,1,1,1,1,1,0,0,0,0,0)
+  lsc   = c(1,1,1,1,1,1,1,0,0,0,0)
+  tt    = c(1,1,1,1,1,1,1,1,0,0,0)
+  ae    = c(1,1,1,1,1,1,1,1,1,0,0)
+  eng_1 = c(1,1,1,1,1,1,1,1,1,1,0)
+  eng_2 = c(1,1,1,1,1,1,1,1,1,1,1)
+  
+  dfs_eng_path = rbind(csb, aa, cg, uf, cnt, soc, lsc, tt, ae, eng_1, eng_2)
+  
+  dfs_eng_pls = plspm(Data=traits_dfs_df, path_matrix=dfs_eng_path, blocks=dfs_eng_blocks, modes=dfs_eng_modes, scaled=FALSE)
+  
+  return(dfs_eng_pls)
 }
 
 plspm_traits_dfs_2 = function(traits_dfs_df){
@@ -458,6 +534,416 @@ plspm_traits_dfs_6 = function(traits_dfs_df){
   return(results)
 }
 
+# PLSPM Adjusted Without Aesthetic and Engagement
+plspm_traits_dfs_adjusted_aest_eng = function(traits_dfs_df){
+  traits_blocks = 37:40
+  dfs_blocks = 86:94
+  traits_dfs_blocks = as.list(append(traits_blocks, dfs_blocks))
+  
+  traits_modes = rep("A", 4)
+  dfs_modes = rep("A", 9)
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_aest_eng.csv", sep=''), header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:4]
+  output_vars = colnames(traits_dfs_path)[5:13]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
+# PLSPM Without Engagement and Adjustments on Aesthetic
+plspm_traits_dfs_adjusted_aest_eng_2 = function(traits_dfs_df){
+  traits_blocks = 36:40
+  dfs_blocks = 86:94
+  traits_dfs_blocks = as.list(append(traits_blocks, dfs_blocks))
+  
+  traits_modes = rep("A", 4)
+  dfs_modes = rep("A", 9)
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_aest_eng.csv", sep=''), header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:4]
+  output_vars = colnames(traits_dfs_path)[5:13]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
+plspm_traits_dfs_mean = function(traits_dfs_df){
+  traits_mean_df = data.frame(transmute(rowwise(traits_dfs_df), aesthetic = mean(c_across(15:19))),
+             transmute(rowwise(traits_dfs_df), challenge = mean(c_across(25:29))),
+             transmute(rowwise(traits_dfs_df), narrative = mean(c_across(20:24))),
+             transmute(rowwise(traits_dfs_df), goals = mean(c_across(30:34))),
+             transmute(rowwise(traits_dfs_df), social = mean(c_across(10:14))))
+  
+  flow_mean_df = data.frame(transmute(rowwise(traits_dfs_df), challenge.skill.balance = mean(c_across(seq.int(from=42, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), action.awareness = mean(c_across(seq.int(from=43, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), clear.goals = mean(c_across(seq.int(from=44, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), unambiguous.feedback = mean(c_across(seq.int(from=45, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), concentration = mean(c_across(seq.int(from=46, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), sense.of.control = mean(c_across(seq.int(from=47, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), loss.of.self.consciousness = mean(c_across(seq.int(from=48, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), time.transformation = mean(c_across(seq.int(from=49, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), autotelic.experience = mean(c_across(seq.int(from=50, length.out=4, by=9)))))
+  
+  traits_dfs_df = data.frame(traits_mean_df, flow_mean_df)
+  
+  traits_blocks = 1:5
+  dfs_blocks = 6:14
+  traits_dfs_blocks = as.list(append(traits_blocks, dfs_blocks))
+  
+  traits_modes = rep("A", 5)
+  dfs_modes = rep("A", 9)
+
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_eng.csv", sep=''), header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:5]
+  output_vars = colnames(traits_dfs_path)[6:14]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
+plspm_traits_dfs_mean_adj_aest = function(traits_dfs_df){
+  traits_mean_df = data.frame(transmute(rowwise(traits_dfs_df), challenge = mean(c_across(25:29))),
+                              transmute(rowwise(traits_dfs_df), narrative = mean(c_across(20:24))),
+                              transmute(rowwise(traits_dfs_df), goals = mean(c_across(30:34))),
+                              transmute(rowwise(traits_dfs_df), social = mean(c_across(10:14))))
+  
+  flow_mean_df = data.frame(transmute(rowwise(traits_dfs_df), challenge.skill.balance = mean(c_across(seq.int(from=42, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), action.awareness = mean(c_across(seq.int(from=43, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), clear.goals = mean(c_across(seq.int(from=44, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), unambiguous.feedback = mean(c_across(seq.int(from=45, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), concentration = mean(c_across(seq.int(from=46, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), sense.of.control = mean(c_across(seq.int(from=47, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), loss.of.self.consciousness = mean(c_across(seq.int(from=48, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), time.transformation = mean(c_across(seq.int(from=49, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), autotelic.experience = mean(c_across(seq.int(from=50, length.out=4, by=9)))))
+  
+  traits_dfs_df = data.frame(traits_mean_df, flow_mean_df)
+  
+  traits_blocks = 1:4
+  dfs_blocks = 5:13
+  traits_dfs_blocks = as.list(append(traits_blocks, dfs_blocks))
+  
+  traits_modes = rep("A", 4)
+  dfs_modes = rep("A", 9)
+  
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_aest_eng.csv", sep=''), header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[traits_blocks]
+  output_vars = colnames(traits_dfs_path)[dfs_blocks]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
+plspm_traits_dfs_mean_adj_part_aest_1 = function(traits_dfs_df){
+  traits_mean_df = data.frame(transmute(rowwise(traits_dfs_df), aesthetic = mean(c_across(c(15,16,17,19)))),
+                              transmute(rowwise(traits_dfs_df), challenge = mean(c_across(25:29))),
+                              transmute(rowwise(traits_dfs_df), narrative = mean(c_across(20:24))),
+                              transmute(rowwise(traits_dfs_df), goals = mean(c_across(30:34))),
+                              transmute(rowwise(traits_dfs_df), social = mean(c_across(10:14))))
+  
+  flow_mean_df = data.frame(transmute(rowwise(traits_dfs_df), challenge.skill.balance = mean(c_across(seq.int(from=42, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), action.awareness = mean(c_across(seq.int(from=43, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), clear.goals = mean(c_across(seq.int(from=44, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), unambiguous.feedback = mean(c_across(seq.int(from=45, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), concentration = mean(c_across(seq.int(from=46, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), sense.of.control = mean(c_across(seq.int(from=47, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), loss.of.self.consciousness = mean(c_across(seq.int(from=48, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), time.transformation = mean(c_across(seq.int(from=49, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), autotelic.experience = mean(c_across(seq.int(from=50, length.out=4, by=9)))))
+  
+  traits_dfs_df = data.frame(traits_mean_df, flow_mean_df)
+  
+  traits_blocks = 1:5
+  dfs_blocks = 6:14
+  traits_dfs_blocks = as.list(append(traits_blocks, dfs_blocks))
+  
+  traits_modes = rep("A", 5)
+  dfs_modes = rep("A", 9)
+  
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_eng.csv", sep=''), header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:5]
+  output_vars = colnames(traits_dfs_path)[6:14]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
+plspm_traits_dfs_mean_adj_part_aest_2 = function(traits_dfs_df){
+  traits_mean_df = data.frame(transmute(rowwise(traits_dfs_df), aesthetic = mean(c_across(c(15,16,19)))),
+                              transmute(rowwise(traits_dfs_df), challenge = mean(c_across(25:29))),
+                              transmute(rowwise(traits_dfs_df), narrative = mean(c_across(20:24))),
+                              transmute(rowwise(traits_dfs_df), goals = mean(c_across(30:34))),
+                              transmute(rowwise(traits_dfs_df), social = mean(c_across(10:14))))
+  
+  flow_mean_df = data.frame(transmute(rowwise(traits_dfs_df), challenge.skill.balance = mean(c_across(seq.int(from=42, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), action.awareness = mean(c_across(seq.int(from=43, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), clear.goals = mean(c_across(seq.int(from=44, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), unambiguous.feedback = mean(c_across(seq.int(from=45, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), concentration = mean(c_across(seq.int(from=46, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), sense.of.control = mean(c_across(seq.int(from=47, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), loss.of.self.consciousness = mean(c_across(seq.int(from=48, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), time.transformation = mean(c_across(seq.int(from=49, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), autotelic.experience = mean(c_across(seq.int(from=50, length.out=4, by=9)))))
+  
+  traits_dfs_df = data.frame(traits_mean_df, flow_mean_df)
+  
+  traits_blocks = 1:5
+  dfs_blocks = 6:14
+  traits_dfs_blocks = as.list(append(traits_blocks, dfs_blocks))
+  
+  traits_modes = rep("A", 5)
+  dfs_modes = rep("A", 9)
+  
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_eng.csv", sep=''), header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:5]
+  output_vars = colnames(traits_dfs_path)[6:14]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
+plspm_traits_dfs_mean_adj_part_all = function(traits_dfs_df){
+  traits_mean_df = data.frame(transmute(rowwise(traits_dfs_df), aesthetic = mean(c_across(c(15,16,19)))),
+                              transmute(rowwise(traits_dfs_df), challenge = mean(c_across(c(25,27,28,29)))),
+                              transmute(rowwise(traits_dfs_df), narrative = mean(c_across(c(20,22,23,24)))),
+                              transmute(rowwise(traits_dfs_df), goals = mean(c_across(30:33))),
+                              transmute(rowwise(traits_dfs_df), social = mean(c_across(10:13))))
+  
+  flow_mean_df = data.frame(transmute(rowwise(traits_dfs_df), challenge.skill.balance = mean(c_across(seq.int(from=42, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), action.awareness = mean(c_across(seq.int(from=43, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), clear.goals = mean(c_across(seq.int(from=44, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), unambiguous.feedback = mean(c_across(seq.int(from=45, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), concentration = mean(c_across(seq.int(from=46, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), sense.of.control = mean(c_across(seq.int(from=47, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), loss.of.self.consciousness = mean(c_across(seq.int(from=48, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), time.transformation = mean(c_across(seq.int(from=49, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), autotelic.experience = mean(c_across(seq.int(from=50, length.out=4, by=9)))))
+  
+  traits_dfs_df = data.frame(traits_mean_df, flow_mean_df)
+  
+  traits_blocks = 1:5
+  dfs_blocks = 6:14
+  traits_dfs_blocks = as.list(append(traits_blocks, dfs_blocks))
+  
+  traits_modes = rep("A", 5)
+  dfs_modes = rep("A", 9)
+  
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_eng.csv", sep=''), header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[1:5]
+  output_vars = colnames(traits_dfs_path)[6:14]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
+plspm_traits_dfs_mean_adj_aest_part_all = function(traits_dfs_df){
+  traits_mean_df = data.frame(transmute(rowwise(traits_dfs_df), challenge = mean(c_across(c(25,27,28,29)))),
+                              transmute(rowwise(traits_dfs_df), narrative = mean(c_across(c(20,22,23,24)))),
+                              transmute(rowwise(traits_dfs_df), goals = mean(c_across(30:33))),
+                              transmute(rowwise(traits_dfs_df), social = mean(c_across(10:13))))
+  
+  flow_mean_df = data.frame(transmute(rowwise(traits_dfs_df), challenge.skill.balance = mean(c_across(seq.int(from=42, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), action.awareness = mean(c_across(seq.int(from=43, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), clear.goals = mean(c_across(seq.int(from=44, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), unambiguous.feedback = mean(c_across(seq.int(from=45, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), concentration = mean(c_across(seq.int(from=46, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), sense.of.control = mean(c_across(seq.int(from=47, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), loss.of.self.consciousness = mean(c_across(seq.int(from=48, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), time.transformation = mean(c_across(seq.int(from=49, length.out=4, by=9)))),
+                            transmute(rowwise(traits_dfs_df), autotelic.experience = mean(c_across(seq.int(from=50, length.out=4, by=9)))))
+  
+  traits_dfs_df = data.frame(traits_mean_df, flow_mean_df)
+  
+  traits_blocks = 1:4
+  dfs_blocks = 5:13
+  traits_dfs_blocks = as.list(append(traits_blocks, dfs_blocks))
+  
+  traits_modes = rep("A", length(traits_blocks))
+  dfs_modes = rep("A", length(dfs_blocks))
+  
+  traits_dfs_modes = append(traits_modes, dfs_modes)
+  
+  traits_dfs_path = read.csv(paste(model_path, "path_inner_model_adjusted_aest_eng.csv", sep=''), header=TRUE, sep=";", row.names = 1)
+  traits_dfs_path = as.matrix(traits_dfs_path)
+  rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
+  colnames(traits_dfs_path) = rownames(traits_dfs_path)
+  
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  
+  input_vars = colnames(traits_dfs_path)[traits_blocks]
+  output_vars = colnames(traits_dfs_path)[dfs_blocks]
+  
+  path_coefs = traits_dfs_pls$path_coefs[output_vars, input_vars]
+  
+  p_values = matrix(nrow=length(input_vars), ncol=length(output_vars))
+  rownames(p_values) = input_vars
+  colnames(p_values) = output_vars
+  p_values = data.frame(p_values)
+  
+  for(var in output_vars){
+    p_values[,var] = traits_dfs_pls$inner_model[[var]][2:(length(input_vars)+1),4]
+  }
+  
+  p_values = t(p_values)
+  
+  results <- list("path_coefs" = path_coefs, "p_values" = p_values, "traits_dfs_pls" = traits_dfs_pls)
+  
+  return(results)
+}
+
 plot_plspm_traits_dfs = function(path_coefs, p_values, significative_level = 0.05, title = "", color_lim){
   corrplot(path_coefs, title=title, method="number",
            sig.level = significative_level, p.mat = p_values, 
@@ -506,6 +992,38 @@ pls_analysis = function(first_df, second_df, third_df, first_title, second_title
     first_pls = plspm_traits_dfs_value_adjusted_3(first_df)
     second_pls = plspm_traits_dfs_value_adjusted_3(second_df)
     third_pls = plspm_traits_dfs_value_adjusted_3(third_df)
+  }else if(type==11){
+    first_pls = plspm_traits_dfs_adjusted_aest_eng(first_df)
+    second_pls = plspm_traits_dfs_adjusted_aest_eng(second_df)
+    third_pls = plspm_traits_dfs_adjusted_aest_eng(third_df)
+  }else if(type==12){
+    first_pls = plspm_traits_dfs_adjusted_eng_part_aest(first_df)
+    second_pls = plspm_traits_dfs_adjusted_eng_part_aest(second_df)
+    third_pls = plspm_traits_dfs_adjusted_eng_part_aest(third_df)
+  }else if(type==13){
+    first_pls = plspm_traits_dfs_mean(first_df)
+    second_pls = plspm_traits_dfs_mean(second_df)
+    third_pls = plspm_traits_dfs_mean(third_df)
+  }else if(type==14){
+    first_pls = plspm_traits_dfs_mean_adj_aest(first_df)
+    second_pls = plspm_traits_dfs_mean_adj_aest(second_df)
+    third_pls = plspm_traits_dfs_mean_adj_aest(third_df)
+  }else if(type==15){
+    first_pls = plspm_traits_dfs_mean_adj_part_aest_1(first_df)
+    second_pls = plspm_traits_dfs_mean_adj_part_aest_1(second_df)
+    third_pls = plspm_traits_dfs_mean_adj_part_aest_1(third_df)
+  }else if(type==16){
+    first_pls = plspm_traits_dfs_mean_adj_part_aest_2(first_df)
+    second_pls = plspm_traits_dfs_mean_adj_part_aest_2(second_df)
+    third_pls = plspm_traits_dfs_mean_adj_part_aest_2(third_df)
+  }else if(type==17){
+    first_pls = plspm_traits_dfs_mean_adj_part_all(first_df)
+    second_pls = plspm_traits_dfs_mean_adj_part_all(second_df)
+    third_pls = plspm_traits_dfs_mean_adj_part_all(third_df)
+  }else if(type==18){
+    first_pls = plspm_traits_dfs_mean_adj_aest_part_all(first_df)
+    second_pls = plspm_traits_dfs_mean_adj_aest_part_all(second_df)
+    third_pls = plspm_traits_dfs_mean_adj_aest_part_all(third_df)
   }
   
   par(mfcol = c(3,2))
