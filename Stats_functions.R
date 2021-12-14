@@ -2,158 +2,154 @@ library(stringr)
 library(ggpubr)
 source("LoadData.R",encoding="utf-8")
 
-scenario_bp = function(dimension = "", y_range=c(0,28)){
-  bp = NULL
-  sumaov <- summary.aov(aov(traits_dfs_df[[dimension]] ~ qu.avez.vous.vu.lors.de.l.experience..,data=traits_dfs_df))
-  if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-    dimensions_df = data.frame(Objectives=objectives_df[[dimension]],
-                               Aesthetic=aesthetic_df[[dimension]],
-                               Narrative=narrative_df[[dimension]])
-    bp = boxplot(dimensions_df, ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
-    means <- colMeans(dimensions_df)
-    print(means)
-    points(means, col = "red", pch = 19, cex=1.5)
-    mtext("Score", side=2, line=2, cex=1.75)
-    
-    #mtext(paste(str_to_title(dimension), "\n All Orders"), line=1)
-    #mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
-  }
-
-}
-
 scenario_ggbp = function(dimension=""){
-  scenario_df = cbind(traits_dfs_df[[dimension]], traits_dfs_df[["qu.avez.vous.vu.lors.de.l.experience.."]])
-  colnames(scenario_df) = c("Score", "Scenario")
-  scenario_df = as.data.frame(scenario_df)
-  scenario_df = mutate(scenario_df, Score=as.integer(Score))
+  scenario_df = data.frame(Score = traits_dfs_df[[dimension]], Scenario = traits_dfs_df[["qu.avez.vous.vu.lors.de.l.experience.."]])
   scenario_df = mutate(scenario_df, Scenario=str_replace(Scenario, "Des portails", "Aesthetic"))
   scenario_df = mutate(scenario_df, Scenario=str_replace(Scenario, "Des zombies", "Goals"))
   scenario_df = mutate(scenario_df, Scenario=str_replace(Scenario, "Les recherches d'Isidore", "Narrative"))
+  scenario_df = arrange(scenario_df, Scenario)
   
   scenario_comparison <- list(c("Aesthetic", "Narrative"), c("Aesthetic", "Goals"), c("Narrative", "Goals"))
   
   ggboxplot(scenario_df, x = "Scenario", y = "Score",
-            color = "Scenario", palette = "jco", ylim = c(0, 28))+ 
+            color = "Scenario", palette = "jco", ylim = c(0, 40)) +
     stat_compare_means(comparisons = scenario_comparison,
-                       label.y = c(0, 1, 2), tip.length = c(-0.02, -0.02, -0.02),
-                       symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns")))
+                       label.y = c(37, 33, 29),
+                       tip.length = c(0.05, 0.05, 0.05),
+                       method.args = list(exact=FALSE),
+                       symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                       symbols = c("****", "***", "**", "*", "ns"))) +
+    stat_compare_means(method = "anova",
+                       label.x = 0.55,
+                       label.y = 40,
+                       label.sep = ' | ') +
+    geom_hline(yintercept = 28,
+               color = "black",
+               linetype = "dashed") +
+    ggplot2::annotate("text", 
+                      0.5, 
+                      30, 
+                      label = "Max",
+                      color = "black")
   
   #return(compare_means(Score ~ Scenario,  data = scenario_df))
 }
 
-order_bp = function(dimension = "", y_range=c(0,28)){
-  bp = NULL
-  sumaov <- summary.aov(aov(traits_dfs_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=traits_dfs_df))
-  if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-    dimensions_df = data.frame(First=first_df[[dimension]],
-                               Second=second_df[[dimension]],
-                               Third=third_df[[dimension]])
-    bp = boxplot(dimensions_df, ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
-    means <- colMeans(dimensions_df)
-    print(means)
-    points(means, col = "red", pch = 19, cex=1.5)
-    mtext("Score", side=2, line=2, cex=1.75)
-    #mtext(paste(str_to_title(dimension), "\n All Scenario"), line=1)
-    #mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
-  }
-  return(TukeyHSD(aov(traits_dfs_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=traits_dfs_df)))
-}
-
 order_ggbp = function(dimension=""){
-  order_df = cbind(traits_dfs_df[[dimension]], traits_dfs_df[["est.ce.votre.premiere..deuxieme.ou.troisieme.experience.."]])
-  colnames(order_df) = c("Score", "Order")
-  order_df = as.data.frame(order_df)
-  order_df = mutate(order_df, Score=as.integer(Score))
+  order_df = data.frame(Score = traits_dfs_df[[dimension]], Order = traits_dfs_df[["est.ce.votre.premiere..deuxieme.ou.troisieme.experience.."]])
   order_df = mutate(order_df, Order=str_replace(Order, "Première", "First"))
   order_df = mutate(order_df, Order=str_replace(Order, "Deuxième", "Second"))
   order_df = mutate(order_df, Order=str_replace(Order, "Troisième", "Third"))
+  order_df = arrange(order_df, Order)
   
   order_comparison <- list(c("First", "Second"), c("First", "Third"), c("Second", "Third"))
   
   ggboxplot(order_df, x = "Order", y = "Score",
-            color = "Order", palette = "jco", ylim = c(0, 28))+ 
+            color = "Order", palette = "jco", ylim = c(0, 40)) +
     stat_compare_means(comparisons = order_comparison,
-                       label.y = c(0, 1, 2), tip.length = c(-0.02, -0.02, -0.02),
-                       symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns")))
+                       label.y = c(37, 33, 29),
+                       tip.length = c(0.05, 0.05, 0.05),
+                       method.args = list(exact=FALSE),
+                       symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                                          symbols = c("****", "***", "**", "*", "ns"))) +
+    stat_compare_means(method = "anova",
+                       label.x = 0.55,
+                       label.y = 40,
+                       label.sep = ' | ') +
+    geom_hline(yintercept = 28,
+               color = "black",
+               linetype = "dashed") +
+    ggplot2::annotate("text", 
+                      0.5, 
+                      30, 
+                      label = "Max",
+                      color = "black")
   
   #return(compare_means(Score ~ Scenario,  data = scenario_df))
 }
 
-scenario_order_bp = function(dimension = "", y_range=c(0,28), order=1){
+scenario_order_ggbp = function(dimension = "", order=1){
+  scenario_order_df = data.frame(Score = traits_dfs_df[[dimension]], Scenario = traits_dfs_df[["qu.avez.vous.vu.lors.de.l.experience.."]], Order = traits_dfs_df[["est.ce.votre.premiere..deuxieme.ou.troisieme.experience.."]])
+  scenario_order_df = mutate(scenario_order_df, Scenario=str_replace(Scenario, "Des portails", "Aesthetic"))
+  scenario_order_df = mutate(scenario_order_df, Scenario=str_replace(Scenario, "Des zombies", "Goals"))
+  scenario_order_df = mutate(scenario_order_df, Scenario=str_replace(Scenario, "Les recherches d'Isidore", "Narrative"))
+  scenario_order_df = mutate(scenario_order_df, Order=str_replace(Order, "Première", "First"))
+  scenario_order_df = mutate(scenario_order_df, Order=str_replace(Order, "Deuxième", "Second"))
+  scenario_order_df = mutate(scenario_order_df, Order=str_replace(Order, "Troisième", "Third"))
+  scenario_order_df = arrange(scenario_order_df, Scenario)
+  
+  scenario_comparison <- list(c("Aesthetic", "Narrative"), c("Aesthetic", "Goals"), c("Narrative", "Goals"))
+  
   if(order == 1){
-    sumaov <- summary.aov(aov(first_df[[dimension]] ~ qu.avez.vous.vu.lors.de.l.experience.., data=first_df))
-    if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-      boxplot(data.frame(Objectives=objectives_first[[dimension]],
-                       Aesthetic=aesthetic_first[[dimension]],
-                       Narrative=narrative_first[[dimension]]), ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
-    }
+    scenario_order_df <- filter(scenario_order_df, Order == "First")
   }else if(order == 2){
-    sumaov <- summary.aov(aov(second_df[[dimension]] ~ qu.avez.vous.vu.lors.de.l.experience.., data=second_df))
-    if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-      boxplot(data.frame(Objectives=objectives_second[[dimension]],
-                       Aesthetic=aesthetic_second[[dimension]],
-                       Narrative=narrative_second[[dimension]]), ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
-    }
+    scenario_order_df <- filter(scenario_order_df, Order == "Second")
   }else if(order == 3){
-    sumaov <- summary.aov(aov(third_df[[dimension]] ~ qu.avez.vous.vu.lors.de.l.experience.., data=third_df))
-    if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-      boxplot(data.frame(Objectives=objectives_third[[dimension]],
-                       Aesthetic=aesthetic_third[[dimension]],
-                       Narrative=narrative_third[[dimension]]), ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
-    }
+    scenario_order_df <- filter(scenario_order_df, Order == "Third")
   }
-  if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-    mtext(paste(str_to_title(dimension), "\n Order :", order), line=1)
-    mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
-  }
+  
+  ggboxplot(scenario_order_df, x = "Scenario", y = "Score",
+            color = "Scenario", palette = "jco", ylim = c(0, 40)) +
+    stat_compare_means(comparisons = scenario_comparison,
+                       label.y = c(37, 33, 29),
+                       tip.length = c(0.05, 0.05, 0.05),
+                       method.args = list(exact=FALSE),
+                       symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                                          symbols = c("****", "***", "**", "*", "ns"))) +
+    stat_compare_means(method = "anova",
+                       label.x = 0.55,
+                       label.y = 40,
+                       label.sep = ' | ') +
+    geom_hline(yintercept = 28,
+               color = "black",
+               linetype = "dashed") +
+    ggplot2::annotate("text", 
+                      0.5, 
+                      30, 
+                      label = "Max",
+                      color = "black")
 }
 
-order_scenario_bp = function(dimension = "", y_range=c(0,28), scenario=""){
-  bp = NULL
-  if(scenario == "aesthetic"){
-    sumaov <- summary.aov(aov(aesthetic_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=aesthetic_df))
-    if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-      dimensions_df = data.frame(First=aesthetic_first[[dimension]],
-                                 Second=aesthetic_second[[dimension]],
-                                 Third=aesthetic_third[[dimension]])
-      bp = boxplot(dimensions_df, ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
-      means <- colMeans(dimensions_df)
-      print(means)
-      points(means, col = "red", pch = 19, cex=1.5)
-      mtext("Score", side=2, line=2, cex=1.75)
- 
-    }
-  }else if(scenario == "narrative"){
-    sumaov <- summary.aov(aov(narrative_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=narrative_df))
-    if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-      dimensions_df = data.frame(First=narrative_first[[dimension]],
-                                 Second=narrative_second[[dimension]],
-                                 Third=narrative_third[[dimension]])
-      bp = boxplot(dimensions_df, ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
-      means <- colMeans(dimensions_df)
-      print(means)
-      points(means, col = "red", pch = 19, cex=1.5)
-      mtext("Score", side=2, line=2, cex=1.75)
-    }
-  }else if(scenario == "objectives"){
-    sumaov <- summary.aov(aov(objectives_df[[dimension]] ~ est.ce.votre.premiere..deuxieme.ou.troisieme.experience.., data=objectives_df))
-    if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-      dimensions_df = data.frame(First=objectives_first[[dimension]],
-                                 Second=objectives_second[[dimension]],
-                                 Third=objectives_third[[dimension]])
-      bp = boxplot(dimensions_df, ylab = "score", ylim=y_range, col=c("darkorchid1", "cadetblue1", "darkolivegreen1"))
-      summary(dimensions_df)
-      means <- colMeans(dimensions_df)
-      print(means)
-      points(means, col = "red", pch = 19, cex=1.5)
-      mtext("Score", side=2, line=2, cex=1.75)
-    }
+order_scenario_ggbp = function(dimension = "", y_range=c(0,28), scenario=""){
+  order_scenario_df = data.frame(Score = traits_dfs_df[[dimension]], Scenario = traits_dfs_df[["qu.avez.vous.vu.lors.de.l.experience.."]], Order = traits_dfs_df[["est.ce.votre.premiere..deuxieme.ou.troisieme.experience.."]])
+  order_scenario_df = mutate(order_scenario_df, Scenario=str_replace(Scenario, "Des portails", "Aesthetic"))
+  order_scenario_df = mutate(order_scenario_df, Scenario=str_replace(Scenario, "Des zombies", "Goals"))
+  order_scenario_df = mutate(order_scenario_df, Scenario=str_replace(Scenario, "Les recherches d'Isidore", "Narrative"))
+  order_scenario_df = mutate(order_scenario_df, Order=str_replace(Order, "Première", "First"))
+  order_scenario_df = mutate(order_scenario_df, Order=str_replace(Order, "Deuxième", "Second"))
+  order_scenario_df = mutate(order_scenario_df, Order=str_replace(Order, "Troisième", "Third"))
+  order_scenario_df = arrange(order_scenario_df, Order)
+  
+  if(scenario == "aest"){
+    order_scenario_df = filter(order_scenario_df, Scenario == "Aesthetic")
+  }else if(scenario == "narr"){
+    order_scenario_df = filter(order_scenario_df, Scenario == "Narrative")
+  }else if(scenario == "goal"){
+    order_scenario_df = filter(order_scenario_df, Scenario == "Goals")
   }
-  if(round(sumaov[[1]][[1,"Pr(>F)"]] < 1.0)){
-    #mtext(paste(str_to_title(dimension), "\n Scenario :" , str_to_title(scenario)), line=1)
-    #mtext(paste("P-Value of ANOVA", round(sumaov[[1]][[1,"Pr(>F)"]], digits=3)), side=1, line=3)
-  }
-
+  
+  order_comparison <- list(c("First", "Second"), c("First", "Third"), c("Second", "Third"))
+  
+  ggboxplot(order_scenario_df, x = "Order", y = "Score",
+            color = "Order", palette = "jco", ylim = c(0, 40)) +
+    stat_compare_means(comparisons = order_comparison,
+                       label.y = c(37, 33, 29),
+                       tip.length = c(0.05, 0.05, 0.05),
+                       method.args = list(exact=FALSE),
+                       symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                                          symbols = c("****", "***", "**", "*", "ns"))) +
+    stat_compare_means(method = "anova",
+                       label.x = 0.55,
+                       label.y = 40,
+                       label.sep = ' | ') +
+    geom_hline(yintercept = 28,
+               color = "black",
+               linetype = "dashed") +
+    ggplot2::annotate("text", 
+                      0.5, 
+                      30, 
+                      label = "Max",
+                      color = "black")
 }
 
 site_bp = function(dimension = "", y_range=c(0,28)){
