@@ -49,6 +49,22 @@ knit_plspm_results(narr_pls, "Narrative")
 knit_plspm_results(goal_pls, "Goals")
 ```
 
+<!-- ### Outer Model Check for Traits, Flow and Engagement -->
+<!-- ```{r, warning=FALSE, echo=FALSE, message=FALSE} -->
+<!-- all_pls = pls_dfs_eng(traits_dfs_df = traits_dfs_df) -->
+
+<!-- aest_pls = pls_dfs_eng(aesthetic_df) -->
+<!-- narr_pls = pls_dfs_eng(narrative_df) -->
+<!-- goal_pls = pls_dfs_eng(objectives_df) -->
+
+<!-- knit_plspm_results(all_pls, "All Scenario") -->
+
+<!-- knit_plspm_results(aest_pls, "Aesthetic") -->
+
+<!-- knit_plspm_results(narr_pls, "Narrative") -->
+
+<!-- knit_plspm_results(goal_pls, "Goals") -->
+<!-- ``` -->
 
 ## ----------- Modele initial / Tous les constructs / Tous les items -----------
 ```{r, warning=FALSE, echo=FALSE, message=FALSE}
@@ -76,7 +92,7 @@ knit_plspm_results(tab[[2]][["traits_dfs_pls"]], "Narrative")
 
 knit_plspm_results(tab[[3]][["traits_dfs_pls"]], "Goals")
 ```
-### ----------- Construct deleted : Engagement / REMOVE AEST3, NARR5 -----------
+### ----------- Construct deleted : Engagement / REMOVE AEST3, AEST4, NARR5 -----------
 ```{r, warning=FALSE, echo=FALSE, message=FALSE}
 tab = pls_analysis(aesthetic_df, narrative_df, objectives_df,
              "Aesthetic Scenario", "Narrative Scenario", "Goals Scenario",

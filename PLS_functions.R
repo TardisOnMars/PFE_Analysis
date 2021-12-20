@@ -327,6 +327,44 @@ pls_dfs_eng = function(traits_dfs_df){
   return(dfs_eng_pls)
 }
 
+pls_traits_dfs = function(traits_dfs_df){
+  traits_blocks = list(15:19, 25:29, 20:24, 30:34, 10:14)
+  
+  dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
+                    seq.int(from=43, length.out=4, by=9),
+                    seq.int(from=44, length.out=4, by=9),
+                    seq.int(from=45, length.out=4, by=9),
+                    seq.int(from=46, length.out=4, by=9),
+                    seq.int(from=47, length.out=4, by=9),
+                    seq.int(from=48, length.out=4, by=9),
+                    seq.int(from=49, length.out=4, by=9),
+                    seq.int(from=50, length.out=4, by=9))
+  
+  traits_modes = rep("A", 5)
+  
+  dfs_modes = rep("A", 9)
+  
+  Aest = c(1,0,0,0,0)
+  Chal = c(1,1,0,0,0)
+  Narr = c(1,1,1,0,0)
+  Goal = c(1,1,1,1,0)
+  Soci = c(1,1,1,1,1)
+  
+  csb = c(1,0,0,0,0,0,0,0,0)
+  aa = c(1,1,0,0,0,0,0,0,0)
+  cg = c(1,1,1,0,0,0,0,0,0)
+  uf = c(1,1,1,1,0,0,0,0,0)
+  cnt = c(1,1,1,1,1,0,0,0,0)
+  soc = c(1,1,1,1,1,1,0,0,0)
+  lsc = c(1,1,1,1,1,1,1,0,0)
+  tt = c(1,1,1,1,1,1,1,1,0)
+  ae = c(1,1,1,1,1,1,1,1,1)
+  
+  dfs_path = rbind(Aest, Chal, Narr, Goal, Soci, csb, aa, cg, uf, cnt, soc, lsc, tt, ae)
+  
+  traits_pls = plspm(Data=traits_dfs_df, path_matrix=traits_path, blocks=traits_blocks, modes=traits_modes, scaled=FALSE)
+}
+
 plspm_traits_dfs_2 = function(traits_dfs_df){
   traits_blocks = 36:40
   dfs_blocks = list(86:94)
