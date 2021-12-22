@@ -3,7 +3,10 @@ library(ggpubr)
 library(rstatix)
 source("LoadData.R", encoding = "utf-8")
 
-scenario_ggbp = function(dimension = "", ymax=28, ylim=c(0, 32), ypos=c(30, 32, 30)) {
+scenario_ggbp = function(dimension = "",
+                         ymax = 28,
+                         ylim = c(0, 32),
+                         ypos = c(30, 32, 30)) {
   scenario_df = data.frame(Score = traits_dfs_df[[dimension]], Scenario = traits_dfs_df[["qu.avez.vous.vu.lors.de.l.experience.."]])
   scenario_df = mutate(scenario_df,
                        Scenario = str_replace(Scenario, "Des portails", "Aesthetic"))
@@ -18,9 +21,13 @@ scenario_ggbp = function(dimension = "", ymax=28, ylim=c(0, 32), ypos=c(30, 32, 
          c("Aesthetic", "Goals"),
          c("Narrative", "Goals"))
   
-  globalstat.test = friedman_test(scenario_df, Score ~ Scenario | id)
+  globalstat.test = friedman_test(scenario_df, Score ~ Scenario |
+                                    id)
   print(globalstat.test)
-  stat.test = wilcox_test(scenario_df, Score ~ Scenario, paired = TRUE, p.adjust.method = "bonferroni")
+  stat.test = wilcox_test(scenario_df,
+                          Score ~ Scenario,
+                          paired = TRUE,
+                          p.adjust.method = "bonferroni")
   print(stat.test)
   
   return(
@@ -28,11 +35,11 @@ scenario_ggbp = function(dimension = "", ymax=28, ylim=c(0, 32), ypos=c(30, 32, 
       scenario_df,
       x = "Scenario",
       y = "Score",
-      color = "Scenario",
-      palette = "jco",
+      fill = "Scenario",
       ylim = ylim
     ) +
-      theme(legend.position = "none") +
+      theme(legend.position = "none",
+            axis.title.x = element_blank()) +
       stat_pvalue_manual(
         stat.test,
         label = "{p.adj} {p.adj.signif}",
@@ -40,24 +47,34 @@ scenario_ggbp = function(dimension = "", ymax=28, ylim=c(0, 32), ypos=c(30, 32, 
         y.position = ypos,
         bracket.shorten = 0.05
       ) +
-      labs(
-        subtitle = get_test_label(globalstat.test)
-      ) +
+      labs(subtitle = get_test_label(globalstat.test)) +
       geom_hline(
         yintercept = ymax,
         color = "black",
         linetype = "dashed"
       ) +
-      ggplot2::annotate("text",
-                        0.6,
-                        1.03*ymax,
-                        label = paste("Max = ", ymax),
-                        color = "black",
-                        size=2)
+      stat_summary(
+        geom = "point",
+        fun = "mean",
+        col = "red",
+        size = 5,
+        shape = 20,
+      ) +
+      ggplot2::annotate(
+        "text",
+        0.65,
+        1.03 * ymax,
+        label = paste("Max = ", ymax),
+        color = "black",
+        size = 2
+      )
   )
 }
 
-order_ggbp = function(dimension = "", ymax=28, ylim=c(0, 32), ypos=c(30, 32, 30)) {
+order_ggbp = function(dimension = "",
+                      ymax = 28,
+                      ylim = c(0, 32),
+                      ypos = c(30, 32, 30)) {
   order_df = data.frame(Score = traits_dfs_df[[dimension]], Order = traits_dfs_df[["est.ce.votre.premiere..deuxieme.ou.troisieme.experience.."]])
   order_df = mutate(order_df, Order = str_replace(Order, "Première", "First"))
   order_df = mutate(order_df, Order = str_replace(Order, "Deuxième", "Second"))
@@ -72,7 +89,10 @@ order_ggbp = function(dimension = "", ymax=28, ylim=c(0, 32), ypos=c(30, 32, 30)
   
   globalstat.test = friedman_test(order_df, Score ~ Order | id)
   print(globalstat.test)
-  stat.test = wilcox_test(order_df, Score ~ Order, paired = TRUE, p.adjust.method = "bonferroni")
+  stat.test = wilcox_test(order_df,
+                          Score ~ Order,
+                          paired = TRUE,
+                          p.adjust.method = "bonferroni")
   print(stat.test)
   
   return(
@@ -80,11 +100,11 @@ order_ggbp = function(dimension = "", ymax=28, ylim=c(0, 32), ypos=c(30, 32, 30)
       order_df,
       x = "Order",
       y = "Score",
-      color = "Order",
-      palette = "jco",
+      fill = "Order",
       ylim = ylim
     ) +
-      theme(legend.position = "none") +
+      theme(legend.position = "none",
+            axis.title.x = element_blank()) +
       stat_pvalue_manual(
         stat.test,
         label = "{p.adj} {p.adj.signif}",
@@ -92,24 +112,35 @@ order_ggbp = function(dimension = "", ymax=28, ylim=c(0, 32), ypos=c(30, 32, 30)
         y.position = ypos,
         bracket.shorten = 0.05
       ) +
-      labs(
-        subtitle = get_test_label(globalstat.test)
-      ) +
+      labs(subtitle = get_test_label(globalstat.test)) +
       geom_hline(
         yintercept = ymax,
         color = "black",
         linetype = "dashed"
       ) +
-      ggplot2::annotate("text",
-                        0.6,
-                        1.03*ymax,
-                        label = paste("Max = ", ymax),
-                        color = "black",
-                        size=2)
+      stat_summary(
+        geom = "point",
+        fun = "mean",
+        col = "red",
+        size = 5,
+        shape = 20,
+      ) +
+      ggplot2::annotate(
+        "text",
+        0.65,
+        1.03 * ymax,
+        label = paste("Max = ", ymax),
+        color = "black",
+        size = 2
+      )
   )
 }
 
-scenario_order_ggbp = function(dimension = "", order = 1, ymax=28, ylim=c(0, 32), ypos=c(30, 32, 30)) {
+scenario_order_ggbp = function(dimension = "",
+                               order = 1,
+                               ymax = 28,
+                               ylim = c(0, 32),
+                               ypos = c(30, 32, 30)) {
   scenario_order_df = data.frame(Score = traits_dfs_df[[dimension]],
                                  Scenario = traits_dfs_df[["qu.avez.vous.vu.lors.de.l.experience.."]],
                                  Order = traits_dfs_df[["est.ce.votre.premiere..deuxieme.ou.troisieme.experience.."]])
@@ -147,11 +178,11 @@ scenario_order_ggbp = function(dimension = "", order = 1, ymax=28, ylim=c(0, 32)
       scenario_order_df,
       x = "Scenario",
       y = "Score",
-      color = "Scenario",
-      palette = "jco",
+      fill = "Scenario",
       ylim = ylim
     ) +
-      theme(legend.position = "none") +
+      theme(legend.position = "none",
+            axis.title.x = element_blank()) +
       stat_pvalue_manual(
         stat.test,
         label = "{p.adj} {p.adj.signif}",
@@ -159,24 +190,35 @@ scenario_order_ggbp = function(dimension = "", order = 1, ymax=28, ylim=c(0, 32)
         y.position = ypos,
         bracket.shorten = 0.05
       ) +
-      labs(
-        subtitle = get_test_label(globalstat.test)
-      ) +
+      labs(subtitle = get_test_label(globalstat.test)) +
       geom_hline(
         yintercept = ymax,
         color = "black",
         linetype = "dashed"
       ) +
-      ggplot2::annotate("text",
-                        0.6,
-                        1.03*ymax,
-                        label = paste("Max = ", ymax),
-                        color = "black",
-                        size=2)
+      stat_summary(
+        geom = "point",
+        fun = "mean",
+        col = "red",
+        size = 5,
+        shape = 20,
+      ) +
+      ggplot2::annotate(
+        "text",
+        0.65,
+        1.03 * ymax,
+        label = paste("Max = ", ymax),
+        color = "black",
+        size = 2
+      )
   )
 }
 
-order_scenario_ggbp = function(dimension = "", scenario = "", ymax=28, ylim=c(0, 32), ypos=c(30, 32, 30)) {
+order_scenario_ggbp = function(dimension = "",
+                               scenario = "",
+                               ymax = 28,
+                               ylim = c(0, 32),
+                               ypos = c(30, 32, 30)) {
   order_scenario_df = data.frame(Score = traits_dfs_df[[dimension]],
                                  Scenario = traits_dfs_df[["qu.avez.vous.vu.lors.de.l.experience.."]],
                                  Order = traits_dfs_df[["est.ce.votre.premiere..deuxieme.ou.troisieme.experience.."]])
@@ -209,11 +251,11 @@ order_scenario_ggbp = function(dimension = "", scenario = "", ymax=28, ylim=c(0,
       order_scenario_df,
       x = "Order",
       y = "Score",
-      color = "Order",
-      palette = "jco",
+      fill = "Order",
       ylim = ylim
     ) +
-      theme(legend.position = "none") +
+      theme(legend.position = "none",
+            axis.title.x = element_blank()) +
       stat_pvalue_manual(
         stat.test,
         label = "{p.adj} {p.adj.signif}",
@@ -221,20 +263,27 @@ order_scenario_ggbp = function(dimension = "", scenario = "", ymax=28, ylim=c(0,
         y.position = ypos,
         bracket.shorten = 0.05
       ) +
-      labs(
-        subtitle = get_test_label(globalstat.test)
-      ) +
+      labs(subtitle = get_test_label(globalstat.test)) +
       geom_hline(
         yintercept = ymax,
         color = "black",
         linetype = "dashed"
       ) +
-      ggplot2::annotate("text",
-                        0.6,
-                        1.03*ymax,
-                        label = paste("Max = ", ymax),
-                        color = "black",
-                        size=2)
+      stat_summary(
+        geom = "point",
+        fun = "mean",
+        col = "red",
+        size = 5,
+        shape = 20,
+      ) +
+      ggplot2::annotate(
+        "text",
+        0.6,
+        1.03 * ymax,
+        label = paste("Max = ", ymax),
+        color = "black",
+        size = 2
+      )
   )
 }
 
@@ -342,7 +391,7 @@ save_ggbp = function(ggbp,
     filename = name,
     width = width,
     height = height,
-    res = 200
+    res = 250
   )
   print(ggbp)
   dev.off()
