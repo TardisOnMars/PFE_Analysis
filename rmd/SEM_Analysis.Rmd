@@ -14,17 +14,53 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r, results='hide', warning=FALSE, echo=FALSE, message=FALSE}
 library(lavaan)
+library(semPlot)
 source("LoadData.R", encoding = "UTF-8")
 source("Stats_functions.R")
 source("PLS_functions.R")
 source("SEM_functions.R")
 ```
+```{r}
+all_data = rbind(sem_all(aesthetic_df), sem_all(narrative_df), sem_all(objectives_df))
+```
 
+### Measurement Model
+```{r}
+measurement_model <- '
+#TRAITS
+Aesthetic1 =~ AEST1 + AEST2 + AEST3 + AEST5
+Challenge =~ CHAL1 + CHAL2 + CHAL3 + CHAL4 + CHAL5
+Goals =~ GOAL1 + GOAL2 + GOAL3 + GOAL4 + GOAL5
+Narrative =~ NARR1 + NARR2 + NARR3 + NARR4 + NARR5
+Social =~ SOCI1 + SOCI2 + SOCI3 + SOCI4 + SOCI5
 
+#FLOW
+Chal.Skill.Balance =~ CSB1 + CSB2 + CSB3 + CSB4
+Action.Awareness =~ AA1 + AA2 + AA3 + AA4
+Clear.Goals =~ CG1 + CG2 + CG3 + CG4
+Unambiguous.Fdbck =~ UF1 + UF2 + UF3 + UF4
+Concentration =~ CNT1 + CNT2 + CNT3 + CNT4
+Sense.of.Control =~ SOC1 + SOC2 + SOC3 + SOC4
+Loss.Self.Cnscsnss =~ LSC1 + LSC2 + LSC3 + LSC4
+Time.Trnsfrmtn =~ TT1 + TT2 + TT3 + TT4
+Autotelic.Exprnc =~ AE1 + AE2 + AE3 + AE4
+
+#ENGAGEMENT
+Engagement1 =~ ENG1 + ENG2 + ENG3 + ENG4 + ENG5 + ENG6
+'
+
+fit_measurement_model <- sem(measurement_model, data=all_data)
+
+summary(fit_measurement_model, standardized=TRUE, fit.measures=TRUE)
+
+semPaths(fit_measurement_model, rotation=2)
+```
+
+### Traits Model
 ```{r}
 traits_data = sem_traits_data(aesthetic_df)
 ```
-### Traits Model
+
 ```{r}
 traits_model <- '
 # measurement model

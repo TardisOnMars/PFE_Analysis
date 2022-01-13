@@ -30,6 +30,10 @@ scenario_ggbp = function(dimension = "",
                           p.adjust.method = "bonferroni")
   print(stat.test)
   
+  print(summary(filter(scenario_df, Scenario=="Aesthetic")))
+  print(summary(filter(scenario_df, Scenario=="Goals")))
+  print(summary(filter(scenario_df, Scenario=="Narrative")))
+  
   return(
     ggboxplot(
       scenario_df,
@@ -94,6 +98,10 @@ order_ggbp = function(dimension = "",
                           paired = TRUE,
                           p.adjust.method = "bonferroni")
   print(stat.test)
+  
+  print(summary(filter(order_df, Order=="First")))
+  print(summary(filter(order_df, Order=="Second")))
+  print(summary(filter(order_df, Order=="Third")))
   
   return(
     ggboxplot(

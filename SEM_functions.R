@@ -56,3 +56,7 @@ sem_engagement_data = function(scenario_df){
   
   return(engagement)
 }
+
+sem_all = function(scenario_df){
+  return(cbind(sem_traits_data(scenario_df), sem_flow_data(scenario_df), sem_engagement_data(scenario_df)))
+}

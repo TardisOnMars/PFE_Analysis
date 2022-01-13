@@ -153,9 +153,9 @@ plspm_traits_dfs_value_adjusted = function(traits_dfs_df){
   return(results)
 }
 
-plspm_traits_dfs_value_adjusted_2 = function(traits_dfs_df){
+plspm_traits_dfs_value_adjusted_2 = function(traits_dfs_df, bootstrap = FALSE, bsr = 100){
   
-  traits_blocks = list(c(15,16,19), 25:29, 20:24, 30:33, 10:14)
+  traits_blocks = list(c(15,16,19), 25:29, 20:24, 30:34, 10:14)
   dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
                     seq.int(from=43, length.out=4, by=9),
                     seq.int(from=44, length.out=4, by=9),
@@ -177,7 +177,7 @@ plspm_traits_dfs_value_adjusted_2 = function(traits_dfs_df){
   rownames(traits_dfs_path) = make.names(rownames(traits_dfs_path))
   colnames(traits_dfs_path) = rownames(traits_dfs_path)
   
-  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE )
+  traits_dfs_pls = plspm(traits_dfs_df, traits_dfs_path, traits_dfs_blocks, scaled = FALSE, boot.val = bootstrap, br = bsr)
   
   input_vars = colnames(traits_dfs_path)[1:5]
   output_vars = colnames(traits_dfs_path)[6:14]
@@ -201,7 +201,7 @@ plspm_traits_dfs_value_adjusted_2 = function(traits_dfs_df){
 }
 
 plspm_traits_dfs_value_adjusted_3 = function(traits_dfs_df, bootstrap = FALSE, bsr = 100){
-  traits_blocks = list(c(15,16,19), 25:29, 20:24, 30:34, 10:14)
+  traits_blocks = list(c(15,16,19), 25:30, 20:24, 30:34, 10:15)
   dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
                     seq.int(from=43, length.out=4, by=9),
                     seq.int(from=44, length.out=4, by=9),
@@ -211,7 +211,7 @@ plspm_traits_dfs_value_adjusted_3 = function(traits_dfs_df, bootstrap = FALSE, b
                     seq.int(from=48, length.out=4, by=9),
                     seq.int(from=49, length.out=4, by=9),
                     seq.int(from=50, length.out=4, by=9))
-  presence_blocks = list(c(79,80,81,83))
+  presence_blocks = list(c(80,81,83))
   traits_dfs_blocks = append(traits_blocks, dfs_blocks)
   traits_dfs_blocks = as.list(append(traits_dfs_blocks, presence_blocks))
   
@@ -250,7 +250,7 @@ plspm_traits_dfs_value_adjusted_3 = function(traits_dfs_df, bootstrap = FALSE, b
 }
 
 pls_traits = function(traits_dfs_df){
-  traits_blocks = list(15:19, 25:29, 20:24, 30:34, 10:14)
+  traits_blocks = list(c(15,16,18,19), 25:29, 20:23, 30:34, 10:14)
   
   traits_modes = rep("A", 5)
   
@@ -262,7 +262,7 @@ pls_traits = function(traits_dfs_df){
   
   traits_path = rbind(Aest, Chal, Narr, Goal, Soci)
   
-  traits_pls = plspm(Data=traits_dfs_df, path_matrix=traits_path, blocks=traits_blocks, modes=traits_modes, scaled=FALSE)
+  traits_pls = plspm(Data=traits_dfs_df, path_matrix=traits_path, blocks=traits_blocks, modes=traits_modes, scaled=FALSE, boot.val = TRUE, br=500)
   
   return(traits_pls)
 }
@@ -324,7 +324,7 @@ pls_dfs_eng = function(traits_dfs_df){
   
   dfs_eng_path = rbind(csb, aa, cg, uf, cnt, soc, lsc, tt, ae, eng)
   
-  dfs_eng_pls = plspm(Data=traits_dfs_df, path_matrix=dfs_eng_path, blocks=dfs_eng_blocks, modes=dfs_eng_modes, scaled=FALSE)
+  dfs_eng_pls = plspm(Data=traits_dfs_df, path_matrix=dfs_eng_path, blocks=dfs_eng_blocks, modes=dfs_eng_modes, scaled=FALSE, boot.val = TRUE, br=500)
   
   return(dfs_eng_pls)
 }
@@ -376,10 +376,110 @@ pls_traits_dfs_eng = function(traits_dfs_df){
   
   path = rbind(Aest, Chal, Narr, Goal, Soci, csb, aa, cg, uf, cnt, soc, lsc, tt, ae, eng)
   
-  pls = plspm(Data=traits_dfs_df, path_matrix=path, blocks=blocks, modes=modes, scaled=FALSE, boot.val = TRUE, br = 5000)
+  pls = plspm(Data=traits_dfs_df, path_matrix=path, blocks=blocks, modes=modes, scaled=FALSE, boot.val = TRUE, br = 500)
 }
 
 pls_traits_dfs_eng_adjusted_1 = function(traits_dfs_df){
+  traits_blocks = list(c(15,16,18,19), c(25,27,28,29), 20:23, 30:33, 10:14)
+  
+  dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
+                    seq.int(from=43, length.out=4, by=9),
+                    seq.int(from=44, length.out=4, by=9),
+                    seq.int(from=45, length.out=4, by=9),
+                    seq.int(from=46, length.out=4, by=9),
+                    seq.int(from=47, length.out=4, by=9),
+                    seq.int(from=48, length.out=4, by=9),
+                    seq.int(from=49, length.out=4, by=9),
+                    seq.int(from=50, length.out=4, by=9))
+  
+  eng_blocks = list(c(79,80,81,82,83))
+  
+  blocks = append(traits_blocks, dfs_blocks)
+  blocks = append(blocks, eng_blocks)
+  
+  traits_modes = rep("A", 5)
+  
+  dfs_modes = rep("A", 9)
+  
+  eng_modes = "A"
+  
+  modes = append(traits_modes, dfs_modes)
+  modes = append(modes, eng_modes)
+  
+  Aest = c(rep(1, 1), rep(0, 14))
+  Chal = c(rep(1, 2), rep(0, 13))
+  Narr = c(rep(1, 3), rep(0, 12))
+  Goal = c(rep(1, 4), rep(0, 11))
+  Soci = c(rep(1, 5), rep(0, 10))
+  
+  csb = c(rep(1, 6), rep(0, 9))
+  aa = c(rep(1, 7), rep(0, 8))
+  cg = c(rep(1, 8), rep(0, 7))
+  uf = c(rep(1, 9), rep(0, 6))
+  cnt = c(rep(1, 10), rep(0, 5))
+  soc = c(rep(1, 11), rep(0, 4))
+  lsc = c(rep(1, 12), rep(0, 3))
+  tt = c(rep(1, 13), rep(0, 2))
+  ae = c(rep(1, 14), rep(0, 1))
+  
+  eng = c(rep(1, 15))
+  
+  path = rbind(Aest, Chal, Narr, Goal, Soci, csb, aa, cg, uf, cnt, soc, lsc, tt, ae, eng)
+  
+  pls = plspm(Data=traits_dfs_df, path_matrix=path, blocks=blocks, modes=modes, scaled=FALSE, boot.val = TRUE, br = 500)
+}
+
+pls_traits_dfs_eng_adjusted_2 = function(traits_dfs_df){
+  traits_blocks = list(c(15,16,19), c(25,27,28,29), 20:23, 30:33, 10:14)
+  
+  dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
+                    seq.int(from=43, length.out=4, by=9),
+                    seq.int(from=44, length.out=4, by=9),
+                    seq.int(from=45, length.out=4, by=9),
+                    seq.int(from=46, length.out=4, by=9),
+                    seq.int(from=47, length.out=4, by=9),
+                    seq.int(from=48, length.out=4, by=9),
+                    seq.int(from=49, length.out=4, by=9),
+                    seq.int(from=50, length.out=4, by=9))
+  
+  eng_blocks = list(c(79,80,81,83))
+  
+  blocks = append(traits_blocks, dfs_blocks)
+  blocks = append(blocks, eng_blocks)
+  
+  traits_modes = rep("A", 5)
+  
+  dfs_modes = rep("A", 9)
+  
+  eng_modes = "A"
+  
+  modes = append(traits_modes, dfs_modes)
+  modes = append(modes, eng_modes)
+  
+  Aest = c(rep(1, 1), rep(0, 14))
+  Chal = c(rep(1, 2), rep(0, 13))
+  Narr = c(rep(1, 3), rep(0, 12))
+  Goal = c(rep(1, 4), rep(0, 11))
+  Soci = c(rep(1, 5), rep(0, 10))
+  
+  csb = c(rep(1, 6), rep(0, 9))
+  aa = c(rep(1, 7), rep(0, 8))
+  cg = c(rep(1, 8), rep(0, 7))
+  uf = c(rep(1, 9), rep(0, 6))
+  cnt = c(rep(1, 10), rep(0, 5))
+  soc = c(rep(1, 11), rep(0, 4))
+  lsc = c(rep(1, 12), rep(0, 3))
+  tt = c(rep(1, 13), rep(0, 2))
+  ae = c(rep(1, 14), rep(0, 1))
+  
+  eng = c(rep(1, 15))
+  
+  path = rbind(Aest, Chal, Narr, Goal, Soci, csb, aa, cg, uf, cnt, soc, lsc, tt, ae, eng)
+  
+  pls = plspm(Data=traits_dfs_df, path_matrix=path, blocks=blocks, modes=modes, scaled=FALSE, boot.val = TRUE, br = 500)
+}
+
+pls_traits_dfs_eng_adjusted_12 = function(traits_dfs_df){
   traits_blocks = list(c(15,16,19), 25:29, 20:24, 30:34, 10:14)
   
   dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
@@ -426,7 +526,51 @@ pls_traits_dfs_eng_adjusted_1 = function(traits_dfs_df){
   
   path = rbind(Aest, Chal, Narr, Goal, Soci, csb, aa, cg, uf, cnt, soc, lsc, tt, ae, eng)
   
-  pls = plspm(Data=traits_dfs_df, path_matrix=path, blocks=blocks, modes=modes, scaled=FALSE, boot.val = TRUE, br = 5000)
+  pls = plspm(Data=traits_dfs_df, path_matrix=path, blocks=blocks, modes=modes, scaled=FALSE, boot.val = TRUE, br = 500)
+}
+
+pls_traits_dfs_eng_adjusted_22 = function(traits_dfs_df){
+  traits_blocks = list(c(15,16,19), 25:29, 20:24, 30:34, 10:14)
+  
+  dfs_blocks = list(seq.int(from=42, length.out=4, by=9),
+                    seq.int(from=43, length.out=4, by=9),
+                    seq.int(from=44, length.out=4, by=9),
+                    seq.int(from=45, length.out=4, by=9),
+                    seq.int(from=46, length.out=4, by=9),
+                    seq.int(from=47, length.out=4, by=9),
+                    seq.int(from=48, length.out=4, by=9),
+                    seq.int(from=49, length.out=4, by=9),
+                    seq.int(from=50, length.out=4, by=9))
+  
+  
+  blocks = append(traits_blocks, dfs_blocks)
+  
+  traits_modes = rep("A", 5)
+  
+  dfs_modes = rep("A", 9)
+  
+  
+  modes = append(traits_modes, dfs_modes)
+  
+  Aest = c(rep(1, 1), rep(0, 13))
+  Chal = c(rep(1, 2), rep(0, 12))
+  Narr = c(rep(1, 3), rep(0, 11))
+  Goal = c(rep(1, 4), rep(0, 10))
+  Soci = c(rep(1, 5), rep(0, 9))
+  
+  csb = c(rep(1, 6), rep(0, 8))
+  aa = c(rep(1, 7), rep(0, 7))
+  cg = c(rep(1, 8), rep(0, 6))
+  uf = c(rep(1, 9), rep(0, 5))
+  cnt = c(rep(1, 10), rep(0, 4))
+  soc = c(rep(1, 11), rep(0, 3))
+  lsc = c(rep(1, 12), rep(0, 2))
+  tt = c(rep(1, 13), rep(0, 1))
+  ae = c(rep(1, 14))
+  
+  path = rbind(Aest, Chal, Narr, Goal, Soci, csb, aa, cg, uf, cnt, soc, lsc, tt, ae)
+  
+  pls = plspm(Data=traits_dfs_df, path_matrix=path, blocks=blocks, modes=modes, scaled=FALSE, boot.val = TRUE, br = 500)
 }
 
 plspm_traits_dfs_2 = function(traits_dfs_df){
@@ -1087,9 +1231,9 @@ pls_analysis = function(first_df, second_df, third_df, first_title, second_title
     second_pls = plspm_traits_dfs_value_adjusted(second_df)
     third_pls = plspm_traits_dfs_value_adjusted(third_df)
   }else if(type==9){
-    first_pls = plspm_traits_dfs_value_adjusted_2(first_df)
-    second_pls = plspm_traits_dfs_value_adjusted_2(second_df)
-    third_pls = plspm_traits_dfs_value_adjusted_2(third_df)
+    first_pls = plspm_traits_dfs_value_adjusted_2(first_df, bootstrap = bootstrap, bsr = bsr)
+    second_pls = plspm_traits_dfs_value_adjusted_2(second_df, bootstrap = bootstrap, bsr = bsr)
+    third_pls = plspm_traits_dfs_value_adjusted_2(third_df, bootstrap = bootstrap, bsr = bsr)
   }else if(type==10){
     first_pls = plspm_traits_dfs_value_adjusted_3(first_df, bootstrap = bootstrap, bsr = bsr)
     second_pls = plspm_traits_dfs_value_adjusted_3(second_df, bootstrap = bootstrap, bsr = bsr)
@@ -1290,7 +1434,7 @@ save_plspm = function(path_coefs,
                      width = 750,
                      height = 1000) {
   
-  name = paste('./plspm/pm_', condition, "_", signif_lvl * 100, ".png", sep = "")
+  name = paste('./plspm/pm_', condition, "_0", signif_lvl * 100, ".png", sep = "")
   png(
     filename = name,
     width = width,
@@ -1305,6 +1449,40 @@ save_plspm = function(path_coefs,
   
   name = paste('./plspm/pm_', condition, "_", signif_lvl * 100, ".txt", sep = "")
   fileConn<-file(name)
-  writeLines(knitr::kable(ifelse(p_values <= signif_lvl, paste("ccolgr", round(path_coefs, digits=2)), round(path_coefs,digits=2)), "latex", linesep = ''), fileConn)
+  writeLines(knitr::kable(
+    ifelse(
+      p_values <= signif_lvl,
+      ifelse(p_values <= 0.001,
+             paste("\\cellcolor{black}", round(path_coefs, 3)),
+      paste("\\cellcolor{gray}", round(path_coefs, 2))),
+      paste("\\textcolor{lightgray}{", round(path_coefs, 2), '}')
+    ),
+    "latex",
+    escape = FALSE,
+    linesep = ''
+  ), fileConn)
+  close(fileConn)
+  
+  name = paste('./plspm/pvalue_', condition, "_", signif_lvl * 100, ".txt", sep = "")
+  fileConn<-file(name)
+  writeLines(knitr::kable(
+    ifelse(
+      p_values <= signif_lvl,
+      ifelse(p_values <= 0.001,
+             paste("\\cellcolor{black}", round(p_values, 3)),
+             paste("\\cellcolor{gray}", round(p_values, 3))),
+      paste("\\textcolor{lightgray}{", round(p_values, 3), '}')
+    ),
+    "latex",
+    escape = FALSE,
+    linesep = ''
+  ), fileConn)
   close(fileConn)
 }
+
+
+
+
+
+
+
